@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LUXE SHOP — Boutique en Ligne</title>
+  <title>Fy Riah — Boutique Premium Madagascar</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
 </head>
 <body>
 
   <!-- ===== NAVBAR ===== -->
   <header class="navbar" id="navbar">
-    <div class="nav-logo">LUXE<span>SHOP</span></div>
+    <a href="#accueil" class="nav-logo">Fy <span>Riah</span></a>
     <nav class="nav-links">
       <a href="#accueil">Accueil</a>
       <a href="#produits">Produits</a>
@@ -20,75 +20,126 @@
       <a href="#contact">Contact</a>
     </nav>
     <div class="nav-actions">
-      <button class="btn-search" id="searchBtn" aria-label="Recherche">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <button class="btn-icon" id="searchBtn" title="Rechercher">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
-      <button class="btn-cart" id="cartBtn" aria-label="Panier">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        <span class="cart-count" id="cartCount">0</span>
+      <button class="btn-icon btn-cart-icon" id="cartBtn" title="Panier">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge" id="cartCount">0</span>
       </button>
-      <button class="hamburger" id="hamburger" aria-label="Menu">
+      <button class="hamburger" id="hamburger" title="Menu">
         <span></span><span></span><span></span>
       </button>
     </div>
   </header>
 
   <!-- Mobile Menu -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
   <div class="mobile-menu" id="mobileMenu">
-    <a href="#accueil">Accueil</a>
-    <a href="#produits">Produits</a>
-    <a href="#apropos">À Propos</a>
-    <a href="#contact">Contact</a>
+    <button class="mobile-close" id="mobileClose">✕</button>
+    <div class="mobile-logo">Fy <span>Riah</span></div>
+    <nav class="mobile-nav">
+      <a href="#accueil" class="mobile-link">Accueil</a>
+      <a href="#produits" class="mobile-link">Produits</a>
+      <a href="#apropos" class="mobile-link">À Propos</a>
+      <a href="#contact" class="mobile-link">Contact</a>
+    </nav>
   </div>
 
-  <!-- Search Bar -->
-  <div class="search-bar" id="searchBar">
-    <input type="text" id="searchInput" placeholder="Rechercher un produit..." />
-    <button id="searchClose">✕</button>
+  <!-- Search Overlay -->
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-inner">
+      <div class="search-header">
+        <span class="search-logo">Fy <em>Riah</em></span>
+        <button id="searchClose" class="search-close-btn">✕</button>
+      </div>
+      <div class="search-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" placeholder="Rechercher un produit..." autocomplete="off" />
+      </div>
+      <div id="searchResults" class="search-results"></div>
+    </div>
   </div>
 
   <!-- ===== HERO ===== -->
   <section class="hero" id="accueil">
-    <div class="hero-bg"></div>
+    <div class="hero-bg">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+      <div class="orb orb3"></div>
+    </div>
     <div class="hero-content">
-      <p class="hero-tag">Nouvelle Collection 2025</p>
-      <h1 class="hero-title">L'Art du<br/><em>Shopping</em> Raffiné</h1>
-      <p class="hero-sub">Découvrez des produits soigneusement sélectionnés pour votre style de vie moderne.</p>
+      <div class="hero-badge">✦ Nouvelle Collection 2025 ✦</div>
+      <h1>Élégance &amp;<br/><em>Raffinement</em><br/>à votre portée</h1>
+      <p class="hero-sub">Découvrez chez <strong>Fy Riah</strong> une sélection unique de produits premium, livrés partout à Madagascar.</p>
       <div class="hero-btns">
-        <a href="#produits" class="btn-primary">Découvrir</a>
-        <a href="#apropos" class="btn-ghost">En savoir plus</a>
+        <a href="#produits" class="btn-primary">Explorer la boutique</a>
+        <a href="#apropos" class="btn-outline">Notre histoire →</a>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-item"><span>⭐</span> 4.9/5 avis</div>
+        <div class="trust-dot"></div>
+        <div class="trust-item"><span>🚚</span> Livraison rapide</div>
+        <div class="trust-dot"></div>
+        <div class="trust-item"><span>🔒</span> Paiement sécurisé</div>
       </div>
     </div>
-    <div class="hero-scroll">
-      <span>Défiler</span>
-      <div class="scroll-line"></div>
+    <div class="hero-visual">
+      <div class="hero-circle">
+        <span>🛍️</span>
+      </div>
+      <div class="float-card fc1"><span>👗</span><p>Mode</p></div>
+      <div class="float-card fc2"><span>✨</span><p>Beauté</p></div>
+      <div class="float-card fc3"><span>⌚</span><p>Tech</p></div>
     </div>
   </section>
 
-  <!-- ===== CATEGORIES ===== -->
-  <section class="categories">
+  <!-- ===== TICKER ===== -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span>✦ Livraison gratuite dès 150 000 Ar</span>
+      <span>✦ Retours gratuits 30 jours</span>
+      <span>✦ Service client 7j/7</span>
+      <span>✦ Produits certifiés qualité premium</span>
+      <span>✦ Livraison gratuite dès 150 000 Ar</span>
+      <span>✦ Retours gratuits 30 jours</span>
+      <span>✦ Service client 7j/7</span>
+      <span>✦ Produits certifiés qualité premium</span>
+    </div>
+  </div>
+
+  <!-- ===== CATÉGORIES ===== -->
+  <section class="categories" id="categories">
     <div class="container">
+      <div class="section-header">
+        <p class="section-tag">Nos univers</p>
+        <h2>Parcourez nos catégories</h2>
+      </div>
       <div class="cat-grid">
-        <div class="cat-card" data-filter="mode">
+        <button class="cat-card" data-filtre="mode">
           <div class="cat-icon">👗</div>
           <h3>Mode</h3>
-          <p>Vêtements & Accessoires</p>
-        </div>
-        <div class="cat-card" data-filter="beaute">
+          <p>Vêtements &amp; Accessoires</p>
+          <span class="cat-arrow">→</span>
+        </button>
+        <button class="cat-card" data-filtre="beaute">
           <div class="cat-icon">✨</div>
           <h3>Beauté</h3>
-          <p>Soins & Cosmétiques</p>
-        </div>
-        <div class="cat-card" data-filter="maison">
+          <p>Soins &amp; Cosmétiques</p>
+          <span class="cat-arrow">→</span>
+        </button>
+        <button class="cat-card" data-filtre="maison">
           <div class="cat-icon">🏡</div>
           <h3>Maison</h3>
-          <p>Déco & Art de Vivre</p>
-        </div>
-        <div class="cat-card" data-filter="tech">
+          <p>Déco &amp; Art de Vivre</p>
+          <span class="cat-arrow">→</span>
+        </button>
+        <button class="cat-card" data-filtre="tech">
           <div class="cat-icon">💻</div>
           <h3>Tech</h3>
-          <p>Gadgets & Électronique</p>
-        </div>
+          <p>Gadgets &amp; Électronique</p>
+          <span class="cat-arrow">→</span>
+        </button>
       </div>
     </div>
   </section>
@@ -97,8 +148,9 @@
   <section class="produits" id="produits">
     <div class="container">
       <div class="section-header">
-        <p class="section-tag">Notre Sélection</p>
+        <p class="section-tag">Notre sélection</p>
         <h2>Produits Phares</h2>
+        <p class="section-sub">Des produits soigneusement choisis pour vous offrir le meilleur</p>
       </div>
 
       <!-- Filtres -->
@@ -110,142 +162,209 @@
         <button class="filtre-btn" data-filtre="tech">Tech</button>
       </div>
 
-      <!-- Grille produits -->
+      <!-- Grille -->
       <div class="produits-grid" id="produitsGrid">
 
-        <!-- Produit 1 -->
-        <div class="produit-card" data-categorie="mode">
-          <div class="produit-img" style="background: linear-gradient(135deg,#f5e6d3,#e8cba8)">
-            <span class="produit-emoji">👗</span>
-            <span class="badge">Nouveau</span>
-            <div class="produit-overlay">
-              <button class="btn-detail" data-id="1">Voir détails</button>
+        <article class="produit-card" data-categorie="mode">
+          <div class="produit-img" style="background:linear-gradient(135deg,#ede9fe,#c4b5fd)">
+            <span class="p-emoji">👗</span>
+            <span class="badge badge-new">Nouveau</span>
+            <div class="p-actions">
+              <button class="p-action-btn btn-wish" data-id="1">♡</button>
+              <button class="p-action-btn btn-detail" data-id="1">🔍</button>
             </div>
           </div>
           <div class="produit-info">
-            <span class="produit-cat">Mode</span>
-            <h3>Robe Élégante Dorée</h3>
-            <div class="produit-prix">
-              <span class="prix-actuel">89 000 Ar</span>
-              <span class="prix-ancien">110 000 Ar</span>
+            <span class="p-cat">Mode</span>
+            <h3>Robe Élégante Violette</h3>
+            <div class="p-stars">★★★★☆ <span>(42 avis)</span></div>
+            <div class="p-prix">
+              <span class="prix-now">89 000 Ar</span>
+              <span class="prix-old">110 000 Ar</span>
             </div>
-            <div class="produit-stars">★★★★☆ <span>(42)</span></div>
-            <button class="btn-panier" data-id="1" data-nom="Robe Élégante Dorée" data-prix="89000">Ajouter au Panier</button>
+            <button class="btn-panier" data-id="1" data-nom="Robe Élégante Violette" data-prix="89000" data-emoji="👗">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              Ajouter au panier
+            </button>
           </div>
-        </div>
+        </article>
 
-        <!-- Produit 2 -->
-        <div class="produit-card" data-categorie="beaute">
-          <div class="produit-img" style="background: linear-gradient(135deg,#fce4ec,#f8bbd9)">
-            <span class="produit-emoji">✨</span>
-            <span class="badge badge-promo">-20%</span>
-            <div class="produit-overlay">
-              <button class="btn-detail" data-id="2">Voir détails</button>
+        <article class="produit-card" data-categorie="beaute">
+          <div class="produit-img" style="background:linear-gradient(135deg,#fce7f3,#f9a8d4)">
+            <span class="p-emoji">✨</span>
+            <span class="badge badge-promo">−20%</span>
+            <div class="p-actions">
+              <button class="p-action-btn btn-wish" data-id="2">♡</button>
+              <button class="p-action-btn btn-detail" data-id="2">🔍</button>
             </div>
           </div>
           <div class="produit-info">
-            <span class="produit-cat">Beauté</span>
+            <span class="p-cat">Beauté</span>
             <h3>Sérum Éclat Naturel</h3>
-            <div class="produit-prix">
-              <span class="prix-actuel">45 000 Ar</span>
-              <span class="prix-ancien">56 000 Ar</span>
+            <div class="p-stars">★★★★★ <span>(89 avis)</span></div>
+            <div class="p-prix">
+              <span class="prix-now">45 000 Ar</span>
+              <span class="prix-old">56 000 Ar</span>
             </div>
-            <div class="produit-stars">★★★★★ <span>(89)</span></div>
-            <button class="btn-panier" data-id="2" data-nom="Sérum Éclat Naturel" data-prix="45000">Ajouter au Panier</button>
+            <button class="btn-panier" data-id="2" data-nom="Sérum Éclat Naturel" data-prix="45000" data-emoji="✨">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              Ajouter au panier
+            </button>
           </div>
-        </div>
+        </article>
 
-        <!-- Produit 3 -->
-        <div class="produit-card" data-categorie="maison">
-          <div class="produit-img" style="background: linear-gradient(135deg,#e8f5e9,#c8e6c9)">
-            <span class="produit-emoji">🏡</span>
-            <div class="produit-overlay">
-              <button class="btn-detail" data-id="3">Voir détails</button>
+        <article class="produit-card" data-categorie="maison">
+          <div class="produit-img" style="background:linear-gradient(135deg,#d1fae5,#6ee7b7)">
+            <span class="p-emoji">🏺</span>
+            <div class="p-actions">
+              <button class="p-action-btn btn-wish" data-id="3">♡</button>
+              <button class="p-action-btn btn-detail" data-id="3">🔍</button>
             </div>
           </div>
           <div class="produit-info">
-            <span class="produit-cat">Maison</span>
+            <span class="p-cat">Maison</span>
             <h3>Vase Céramique Artisan</h3>
-            <div class="produit-prix">
-              <span class="prix-actuel">62 000 Ar</span>
+            <div class="p-stars">★★★★☆ <span>(31 avis)</span></div>
+            <div class="p-prix">
+              <span class="prix-now">62 000 Ar</span>
             </div>
-            <div class="produit-stars">★★★★☆ <span>(31)</span></div>
-            <button class="btn-panier" data-id="3" data-nom="Vase Céramique Artisan" data-prix="62000">Ajouter au Panier</button>
+            <button class="btn-panier" data-id="3" data-nom="Vase Céramique Artisan" data-prix="62000" data-emoji="🏺">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              Ajouter au panier
+            </button>
           </div>
-        </div>
+        </article>
 
-        <!-- Produit 4 -->
-        <div class="produit-card" data-categorie="tech">
-          <div class="produit-img" style="background: linear-gradient(135deg,#e3f2fd,#bbdefb)">
-            <span class="produit-emoji">🎧</span>
+        <article class="produit-card" data-categorie="tech">
+          <div class="produit-img" style="background:linear-gradient(135deg,#e0e7ff,#a5b4fc)">
+            <span class="p-emoji">🎧</span>
             <span class="badge badge-hot">Populaire</span>
-            <div class="produit-overlay">
-              <button class="btn-detail" data-id="4">Voir détails</button>
+            <div class="p-actions">
+              <button class="p-action-btn btn-wish" data-id="4">♡</button>
+              <button class="p-action-btn btn-detail" data-id="4">🔍</button>
             </div>
           </div>
           <div class="produit-info">
-            <span class="produit-cat">Tech</span>
+            <span class="p-cat">Tech</span>
             <h3>Casque Audio Premium</h3>
-            <div class="produit-prix">
-              <span class="prix-actuel">185 000 Ar</span>
-              <span class="prix-ancien">220 000 Ar</span>
+            <div class="p-stars">★★★★★ <span>(156 avis)</span></div>
+            <div class="p-prix">
+              <span class="prix-now">185 000 Ar</span>
+              <span class="prix-old">220 000 Ar</span>
             </div>
-            <div class="produit-stars">★★★★★ <span>(156)</span></div>
-            <button class="btn-panier" data-id="4" data-nom="Casque Audio Premium" data-prix="185000">Ajouter au Panier</button>
+            <button class="btn-panier" data-id="4" data-nom="Casque Audio Premium" data-prix="185000" data-emoji="🎧">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              Ajouter au panier
+            </button>
           </div>
-        </div>
+        </article>
 
-        <!-- Produit 5 -->
-        <div class="produit-card" data-categorie="mode">
-          <div class="produit-img" style="background: linear-gradient(135deg,#f3e5f5,#ce93d8)">
-            <span class="produit-emoji">👜</span>
-            <div class="produit-overlay">
-              <button class="btn-detail" data-id="5">Voir détails</button>
+        <article class="produit-card" data-categorie="mode">
+          <div class="produit-img" style="background:linear-gradient(135deg,#f5d0fe,#e879f9)">
+            <span class="p-emoji">👜</span>
+            <div class="p-actions">
+              <button class="p-action-btn btn-wish" data-id="5">♡</button>
+              <button class="p-action-btn btn-detail" data-id="5">🔍</button>
             </div>
           </div>
           <div class="produit-info">
-            <span class="produit-cat">Mode</span>
+            <span class="p-cat">Mode</span>
             <h3>Sac à Main Luxe</h3>
-            <div class="produit-prix">
-              <span class="prix-actuel">135 000 Ar</span>
+            <div class="p-stars">★★★★☆ <span>(67 avis)</span></div>
+            <div class="p-prix">
+              <span class="prix-now">135 000 Ar</span>
             </div>
-            <div class="produit-stars">★★★★☆ <span>(67)</span></div>
-            <button class="btn-panier" data-id="5" data-nom="Sac à Main Luxe" data-prix="135000">Ajouter au Panier</button>
+            <button class="btn-panier" data-id="5" data-nom="Sac à Main Luxe" data-prix="135000" data-emoji="👜">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              Ajouter au panier
+            </button>
           </div>
-        </div>
+        </article>
 
-        <!-- Produit 6 -->
-        <div class="produit-card" data-categorie="tech">
-          <div class="produit-img" style="background: linear-gradient(135deg,#fff8e1,#ffe082)">
-            <span class="produit-emoji">⌚</span>
-            <span class="badge">Nouveau</span>
-            <div class="produit-overlay">
-              <button class="btn-detail" data-id="6">Voir détails</button>
+        <article class="produit-card" data-categorie="tech">
+          <div class="produit-img" style="background:linear-gradient(135deg,#ddd6fe,#8b5cf6)">
+            <span class="p-emoji">⌚</span>
+            <span class="badge badge-new">Nouveau</span>
+            <div class="p-actions">
+              <button class="p-action-btn btn-wish" data-id="6">♡</button>
+              <button class="p-action-btn btn-detail" data-id="6">🔍</button>
             </div>
           </div>
           <div class="produit-info">
-            <span class="produit-cat">Tech</span>
-            <h3>Montre Connectée Or</h3>
-            <div class="produit-prix">
-              <span class="prix-actuel">250 000 Ar</span>
-              <span class="prix-ancien">300 000 Ar</span>
+            <span class="p-cat">Tech</span>
+            <h3>Montre Connectée Violet</h3>
+            <div class="p-stars">★★★★★ <span>(203 avis)</span></div>
+            <div class="p-prix">
+              <span class="prix-now">250 000 Ar</span>
+              <span class="prix-old">300 000 Ar</span>
             </div>
-            <div class="produit-stars">★★★★★ <span>(203)</span></div>
-            <button class="btn-panier" data-id="6" data-nom="Montre Connectée Or" data-prix="250000">Ajouter au Panier</button>
+            <button class="btn-panier" data-id="6" data-nom="Montre Connectée Violet" data-prix="250000" data-emoji="⌚">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              Ajouter au panier
+            </button>
           </div>
-        </div>
+        </article>
+
+        <article class="produit-card" data-categorie="beaute">
+          <div class="produit-img" style="background:linear-gradient(135deg,#fdf4ff,#f0abfc)">
+            <span class="p-emoji">💄</span>
+            <div class="p-actions">
+              <button class="p-action-btn btn-wish" data-id="7">♡</button>
+              <button class="p-action-btn btn-detail" data-id="7">🔍</button>
+            </div>
+          </div>
+          <div class="produit-info">
+            <span class="p-cat">Beauté</span>
+            <h3>Rouge à Lèvres Premium</h3>
+            <div class="p-stars">★★★★☆ <span>(58 avis)</span></div>
+            <div class="p-prix">
+              <span class="prix-now">28 000 Ar</span>
+            </div>
+            <button class="btn-panier" data-id="7" data-nom="Rouge à Lèvres Premium" data-prix="28000" data-emoji="💄">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              Ajouter au panier
+            </button>
+          </div>
+        </article>
+
+        <article class="produit-card" data-categorie="maison">
+          <div class="produit-img" style="background:linear-gradient(135deg,#fef3c7,#fcd34d)">
+            <span class="p-emoji">🕯️</span>
+            <span class="badge badge-promo">−15%</span>
+            <div class="p-actions">
+              <button class="p-action-btn btn-wish" data-id="8">♡</button>
+              <button class="p-action-btn btn-detail" data-id="8">🔍</button>
+            </div>
+          </div>
+          <div class="produit-info">
+            <span class="p-cat">Maison</span>
+            <h3>Bougie Parfumée Luxe</h3>
+            <div class="p-stars">★★★★★ <span>(94 avis)</span></div>
+            <div class="p-prix">
+              <span class="prix-now">38 000 Ar</span>
+              <span class="prix-old">45 000 Ar</span>
+            </div>
+            <button class="btn-panier" data-id="8" data-nom="Bougie Parfumée Luxe" data-prix="38000" data-emoji="🕯️">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              Ajouter au panier
+            </button>
+          </div>
+        </article>
 
       </div>
     </div>
   </section>
 
-  <!-- ===== PROMO BANNER ===== -->
-  <section class="promo-banner">
+  <!-- ===== PROMO ===== -->
+  <section class="promo-band">
     <div class="container">
-      <div class="promo-content">
-        <h2>Livraison Gratuite</h2>
-        <p>Pour toute commande supérieure à <strong>150 000 Ar</strong></p>
-        <a href="#produits" class="btn-primary">J'en profite</a>
+      <div class="promo-inner">
+        <div class="promo-text">
+          <p class="promo-tag">Offre limitée</p>
+          <h2>Livraison <em>Gratuite</em></h2>
+          <p>Pour toute commande supérieure à <strong>150 000 Ar</strong></p>
+        </div>
+        <a href="#produits" class="btn-primary">J'en profite maintenant</a>
       </div>
     </div>
   </section>
@@ -254,27 +373,44 @@
   <section class="apropos" id="apropos">
     <div class="container">
       <div class="apropos-grid">
-        <div class="apropos-visuel">
-          <div class="apropos-img-block">
-            <span>🛍️</span>
-          </div>
+        <div class="apropos-visual">
+          <div class="av-main">🛍️</div>
+          <div class="av-card av-c1"><span>200+</span><p>Produits</p></div>
+          <div class="av-card av-c2"><span>5K+</span><p>Clients</p></div>
         </div>
-        <div class="apropos-texte">
+        <div class="apropos-text">
           <p class="section-tag">Notre Histoire</p>
-          <h2>Pourquoi Nous Choisir ?</h2>
-          <p>Chez <strong>LUXE SHOP</strong>, nous croyons que chaque achat est une expérience. Depuis notre création, nous sélectionnons avec soin les produits les plus raffinés pour vous offrir le meilleur.</p>
+          <h2>Pourquoi choisir Fy Riah ?</h2>
+          <p>Née à Antananarivo, <strong>Fy Riah</strong> est la boutique premium qui allie style malgache et standards internationaux. Chaque produit est sélectionné avec soin pour vous offrir le meilleur.</p>
           <ul class="apropos-list">
-            <li><span>✓</span> Produits certifiés et de haute qualité</li>
-            <li><span>✓</span> Livraison rapide partout à Madagascar</li>
-            <li><span>✓</span> Service client disponible 7j/7</li>
-            <li><span>✓</span> Retours gratuits sous 30 jours</li>
+            <li><span class="check">✓</span> Produits certifiés et de haute qualité</li>
+            <li><span class="check">✓</span> Livraison rapide partout à Madagascar</li>
+            <li><span class="check">✓</span> Service client disponible 7j/7</li>
+            <li><span class="check">✓</span> Retours gratuits sous 30 jours</li>
+            <li><span class="check">✓</span> Paiement 100% sécurisé</li>
           </ul>
           <div class="apropos-stats">
-            <div class="stat"><strong>5K+</strong><span>Clients Satisfaits</span></div>
-            <div class="stat"><strong>200+</strong><span>Produits</span></div>
-            <div class="stat"><strong>98%</strong><span>Satisfaction</span></div>
+            <div class="a-stat"><strong>5K+</strong><span>Clients satisfaits</span></div>
+            <div class="a-stat"><strong>200+</strong><span>Produits</span></div>
+            <div class="a-stat"><strong>98%</strong><span>Satisfaction</span></div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NEWSLETTER ===== -->
+  <section class="newsletter">
+    <div class="container">
+      <div class="nl-inner">
+        <div class="nl-text">
+          <h2>Restez informée ✦</h2>
+          <p>Recevez nos offres exclusives et nos nouvelles collections en avant-première.</p>
+        </div>
+        <form class="nl-form" id="newsletterForm">
+          <input type="email" id="nlEmail" placeholder="Votre adresse email..." required />
+          <button type="submit">S'abonner</button>
+        </form>
       </div>
     </div>
   </section>
@@ -284,44 +420,62 @@
     <div class="container">
       <div class="section-header">
         <p class="section-tag">Contactez-nous</p>
-        <h2>On est là pour Vous</h2>
+        <h2>On est là pour vous</h2>
+        <p class="section-sub">Notre équipe vous répond dans les 24 heures</p>
       </div>
       <div class="contact-grid">
         <div class="contact-infos">
-          <div class="contact-item">
-            <span>📍</span>
-            <div>
-              <h4>Adresse</h4>
-              <p>Antananarivo, Madagascar</p>
-            </div>
+          <div class="c-item">
+            <div class="c-icon">📍</div>
+            <div><h4>Adresse</h4><p>Antananarivo, Madagascar</p></div>
           </div>
-          <div class="contact-item">
-            <span>📞</span>
-            <div>
-              <h4>Téléphone</h4>
-              <p>+261 34 00 000 00</p>
-            </div>
+          <div class="c-item">
+            <div class="c-icon">📞</div>
+            <div><h4>WhatsApp</h4><p>+261 34 00 000 00</p></div>
           </div>
-          <div class="contact-item">
-            <span>✉️</span>
-            <div>
-              <h4>Email</h4>
-              <p>contact@luxeshop.mg</p>
-            </div>
+          <div class="c-item">
+            <div class="c-icon">✉️</div>
+            <div><h4>Email</h4><p>contact@fyriah.mg</p></div>
+          </div>
+          <div class="c-item">
+            <div class="c-icon">⏰</div>
+            <div><h4>Horaires</h4><p>Lun–Sam : 8h–18h</p></div>
           </div>
         </div>
         <form class="contact-form" id="contactForm">
-          <div class="form-group">
-            <input type="text" id="nomInput" placeholder="Votre nom" required />
+          <div class="form-row">
+            <div class="fg">
+              <label>Nom complet *</label>
+              <input type="text" id="nomInput" placeholder="Votre nom" required />
+            </div>
+            <div class="fg">
+              <label>Téléphone</label>
+              <input type="tel" id="telInput" placeholder="+261 ..." />
+            </div>
           </div>
-          <div class="form-group">
-            <input type="email" id="emailInput" placeholder="Votre email" required />
+          <div class="fg">
+            <label>Email *</label>
+            <input type="email" id="emailInput" placeholder="votre@email.mg" required />
           </div>
-          <div class="form-group">
-            <textarea id="msgInput" placeholder="Votre message..." rows="5" required></textarea>
+          <div class="fg">
+            <label>Sujet</label>
+            <select id="sujetInput">
+              <option value="">Choisir un sujet...</option>
+              <option>Question sur un produit</option>
+              <option>Suivi de commande</option>
+              <option>Retour / remboursement</option>
+              <option>Autre</option>
+            </select>
           </div>
-          <button type="submit" class="btn-primary">Envoyer le Message</button>
-          <p class="form-success" id="formSuccess">✓ Message envoyé avec succès !</p>
+          <div class="fg">
+            <label>Message *</label>
+            <textarea id="msgInput" rows="5" placeholder="Écrivez votre message..." required></textarea>
+          </div>
+          <button type="submit" class="btn-primary" id="submitBtn">
+            Envoyer le message
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+          <p class="form-ok" id="formSuccess">✓ Message envoyé ! Nous vous répondrons très bientôt.</p>
         </form>
       </div>
     </div>
@@ -332,61 +486,82 @@
     <div class="container">
       <div class="footer-top">
         <div class="footer-brand">
-          <div class="nav-logo">LUXE<span>SHOP</span></div>
-          <p>Votre destination shopping premium à Madagascar.</p>
-        </div>
-        <div class="footer-links">
-          <h4>Navigation</h4>
-          <a href="#accueil">Accueil</a>
-          <a href="#produits">Produits</a>
-          <a href="#apropos">À Propos</a>
-          <a href="#contact">Contact</a>
-        </div>
-        <div class="footer-links">
-          <h4>Politique</h4>
-          <a href="#">Livraison</a>
-          <a href="#">Retours</a>
-          <a href="#">Confidentialité</a>
-          <a href="#">CGV</a>
-        </div>
-        <div class="footer-social">
-          <h4>Réseaux Sociaux</h4>
-          <div class="social-icons">
+          <div class="footer-logo">Fy <span>Riah</span></div>
+          <p>Votre boutique premium de confiance à Madagascar. Qualité, élégance et service au cœur de chaque commande.</p>
+          <div class="footer-socials">
             <a href="#" aria-label="Facebook">📘</a>
             <a href="#" aria-label="Instagram">📸</a>
             <a href="#" aria-label="WhatsApp">💬</a>
             <a href="#" aria-label="TikTok">🎵</a>
           </div>
         </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <a href="#accueil">Accueil</a>
+          <a href="#produits">Produits</a>
+          <a href="#apropos">À Propos</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Informations</h4>
+          <a href="#">Politique de livraison</a>
+          <a href="#">Retours &amp; remboursements</a>
+          <a href="#">Confidentialité</a>
+          <a href="#">Conditions générales</a>
+        </div>
+        <div class="footer-col">
+          <h4>Catégories</h4>
+          <a href="#produits">Mode femme</a>
+          <a href="#produits">Beauté &amp; Soins</a>
+          <a href="#produits">Maison &amp; Déco</a>
+          <a href="#produits">Tech &amp; Gadgets</a>
+        </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2025 LUXE SHOP. Tous droits réservés. Fait avec ❤️ à Madagascar.</p>
+        <p>© 2025 <strong>Fy Riah</strong>. Tous droits réservés. Fait avec ❤️ à Madagascar.</p>
+        <p>💳 Paiement sécurisé &nbsp;·&nbsp; 🔒 Données protégées &nbsp;·&nbsp; 📦 Livraison assurée</p>
       </div>
     </div>
   </footer>
 
-  <!-- ===== PANIER MODAL ===== -->
-  <div class="cart-modal" id="cartModal">
-    <div class="cart-panel">
-      <div class="cart-header">
-        <h3>Mon Panier</h3>
-        <button id="cartClose">✕</button>
+  <!-- ===== PANIER DRAWER ===== -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="drawer-header">
+      <h3>🛍️ Mon Panier</h3>
+      <button id="cartClose">✕</button>
+    </div>
+    <div class="drawer-body" id="cartBody">
+      <div class="cart-vide">
+        <div style="font-size:3rem;margin-bottom:12px">🛒</div>
+        <p>Votre panier est vide</p>
+        <button class="btn-primary" id="cartShopBtn" style="margin-top:20px">Voir les produits</button>
       </div>
-      <div class="cart-body" id="cartBody">
-        <p class="cart-vide">Votre panier est vide.</p>
+    </div>
+    <div class="drawer-footer" id="cartFooter">
+      <div id="livraisonBar"></div>
+      <div class="total-row">
+        <span>Sous-total</span>
+        <strong id="cartTotal">0 Ar</strong>
       </div>
-      <div class="cart-footer">
-        <div class="cart-total">
-          <span>Total :</span>
-          <strong id="cartTotal">0 Ar</strong>
-        </div>
-        <button class="btn-primary w100" id="checkoutBtn">Commander</button>
-      </div>
+      <button class="btn-primary btn-checkout" id="checkoutBtn">Commander maintenant →</button>
+      <p class="secure-msg">🔒 Paiement 100% sécurisé</p>
+    </div>
+  </aside>
+
+  <!-- ===== MODAL PRODUIT ===== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box" id="modalBox">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div id="modalContent"></div>
     </div>
   </div>
 
-  <!-- ===== NOTIFICATION TOAST ===== -->
-  <div class="toast" id="toast"></div>
+  <!-- ===== TOASTS ===== -->
+  <div id="toastZone"></div>
+
+  <!-- ===== BACK TO TOP ===== -->
+  <button class="btn-top" id="btnTop">↑</button>
 
   <script src="script.js"></script>
 </body>
