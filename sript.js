@@ -1,431 +1,427 @@
-/* ===========================
-   LUXE SHOP — script.js
-   =========================== */
+/**
+ * FY RIAH — script.js
+ * Tous les boutons 100% fonctionnels
+ */
 
-"use strict";
-
-// ==========================================
-// DONNÉES PRODUITS
-// ==========================================
-const produits = {
-  1: { nom: "Robe Élégante Dorée", prix: 89000, cat: "mode", emoji: "👗", desc: "Robe longue en soie dorée, coupe élégante pour toutes occasions. Disponible en S, M, L, XL." },
-  2: { nom: "Sérum Éclat Naturel", prix: 45000, cat: "beaute", emoji: "✨", desc: "Formule avancée à base de vitamine C et d'acide hyaluronique pour une peau lumineuse en 7 jours." },
-  3: { nom: "Vase Céramique Artisan", prix: 62000, cat: "maison", emoji: "🏡", desc: "Vase en céramique fait main par des artisans locaux. Hauteur 35cm, idéal pour les fleurs sèches." },
-  4: { nom: "Casque Audio Premium", prix: 185000, cat: "tech", emoji: "🎧", desc: "Son haute fidélité, réduction de bruit active, 30h d'autonomie. Compatible Bluetooth 5.2." },
-  5: { nom: "Sac à Main Luxe", prix: 135000, cat: "mode", emoji: "👜", desc: "Sac en cuir véritable, doublure en velours, fermeture magnétique. Dimensions : 30×20×12 cm." },
-  6: { nom: "Montre Connectée Or", prix: 250000, cat: "tech", emoji: "⌚", desc: "Montre smartwatch dorée, suivi santé avancé, GPS intégré, étanche IP68. Compatible iOS & Android." },
+/* =========================================
+   DONNÉES PRODUITS
+   ========================================= */
+const PRODUITS = {
+  1: { nom: "Robe Élégante Violette",   prix: 89000,  emoji: "👗", cat: "Mode",   stars: "★★★★☆", avis: 42,  desc: "Robe longue en soie violette, coupe élégante pour toutes occasions. Disponible en S, M, L, XL.", ancien: 110000 },
+  2: { nom: "Sérum Éclat Naturel",       prix: 45000,  emoji: "✨", cat: "Beauté", stars: "★★★★★", avis: 89,  desc: "Formule avancée à base de vitamine C et d'acide hyaluronique pour une peau lumineuse en 7 jours.", ancien: 56000 },
+  3: { nom: "Vase Céramique Artisan",    prix: 62000,  emoji: "🏺", cat: "Maison", stars: "★★★★☆", avis: 31,  desc: "Vase en céramique fait main par des artisans locaux. Hauteur 35cm, idéal pour les fleurs sèches." },
+  4: { nom: "Casque Audio Premium",      prix: 185000, emoji: "🎧", cat: "Tech",   stars: "★★★★★", avis: 156, desc: "Son haute fidélité, réduction de bruit active, 30h d'autonomie. Compatible Bluetooth 5.2.", ancien: 220000 },
+  5: { nom: "Sac à Main Luxe",           prix: 135000, emoji: "👜", cat: "Mode",   stars: "★★★★☆", avis: 67,  desc: "Sac en cuir véritable, doublure en velours, fermeture magnétique. Dimensions : 30×20×12 cm." },
+  6: { nom: "Montre Connectée Violet",   prix: 250000, emoji: "⌚", cat: "Tech",   stars: "★★★★★", avis: 203, desc: "Montre smartwatch, suivi santé avancé, GPS intégré, étanche IP68. Compatible iOS & Android.", ancien: 300000 },
+  7: { nom: "Rouge à Lèvres Premium",    prix: 28000,  emoji: "💄", cat: "Beauté", stars: "★★★★☆", avis: 58,  desc: "Formule longue tenue 12h, couleurs intenses. Collection de 18 teintes exclusives." },
+  8: { nom: "Bougie Parfumée Luxe",      prix: 38000,  emoji: "🕯️", cat: "Maison", stars: "★★★★★", avis: 94,  desc: "Cire de soja naturelle, 60h de combustion, parfum floral délicat. Fabriquée à Madagascar.", ancien: 45000 },
 };
 
-// ==========================================
-// PANIER
-// ==========================================
-let panier = JSON.parse(localStorage.getItem("luxeshop_panier") || "{}");
+/* =========================================
+   PANIER
+   ========================================= */
+let panier = {};
+try { panier = JSON.parse(localStorage.getItem("fyriah_cart") || "{}"); } catch(e) { panier = {}; }
+let favoris = new Set(JSON.parse(localStorage.getItem("fyriah_wish") || "[]"));
 
-function sauvegarderPanier() {
-  localStorage.setItem("luxeshop_panier", JSON.stringify(panier));
-}
+function savePanier() { localStorage.setItem("fyriah_cart", JSON.stringify(panier)); }
+function saveFavoris() { localStorage.setItem("fyriah_wish", JSON.stringify([...favoris])); }
 
-function getTotalItems() {
-  return Object.values(panier).reduce((s, item) => s + item.qte, 0);
-}
+function totalItems() { return Object.values(panier).reduce((s,i) => s + i.qte, 0); }
+function totalPrix()  { return Object.values(panier).reduce((s,i) => s + i.qte * i.prix, 0); }
 
-function getTotalPrix() {
-  return Object.values(panier).reduce((s, item) => s + item.qte * item.prix, 0);
-}
-
-function ajouterAuPanier(id, nom, prix) {
+function ajouterPanier(id) {
   id = String(id);
-  if (panier[id]) {
-    panier[id].qte += 1;
-  } else {
-    panier[id] = { nom, prix: parseInt(prix), qte: 1, emoji: produits[id]?.emoji || "📦" };
-  }
-  sauvegarderPanier();
-  majCartCount();
-  afficherPanier();
-  afficherToast(`✓ ${nom} ajouté au panier`);
+  const p = PRODUITS[id];
+  if (!p) return;
+  if (panier[id]) { panier[id].qte++; } else { panier[id] = { nom: p.nom, prix: p.prix, emoji: p.emoji, qte: 1 }; }
+  savePanier();
+  majCartBadge();
+  renderPanier();
+  toast("✓ " + p.nom + " ajouté au panier !");
 }
 
-function changerQuantite(id, delta) {
+function changerQte(id, delta) {
   id = String(id);
   if (!panier[id]) return;
   panier[id].qte += delta;
   if (panier[id].qte <= 0) delete panier[id];
-  sauvegarderPanier();
-  majCartCount();
-  afficherPanier();
+  savePanier();
+  majCartBadge();
+  renderPanier();
 }
 
-function majCartCount() {
-  const count = getTotalItems();
-  document.getElementById("cartCount").textContent = count;
+function majCartBadge() {
+  document.getElementById("cartCount").textContent = totalItems();
 }
 
-function afficherPanier() {
+function renderPanier() {
   const body = document.getElementById("cartBody");
-  const total = document.getElementById("cartTotal");
-  const items = Object.entries(panier);
+  const footer = document.getElementById("cartFooter");
+  const totalEl = document.getElementById("cartTotal");
+  const entries = Object.entries(panier);
 
-  if (items.length === 0) {
-    body.innerHTML = '<p class="cart-vide">Votre panier est vide.</p>';
-    total.textContent = "0 Ar";
+  if (entries.length === 0) {
+    body.innerHTML = `<div class="cart-vide"><div style="font-size:3rem;margin-bottom:12px">🛒</div><p>Votre panier est vide</p><button class="btn-primary" style="margin-top:20px" onclick="fermerPanier();document.getElementById('produits').scrollIntoView({behavior:'smooth'})">Voir les produits</button></div>`;
+    footer.classList.remove("show");
     return;
   }
 
-  body.innerHTML = items.map(([id, item]) => `
+  body.innerHTML = entries.map(([id, item]) => `
     <div class="cart-item">
-      <span class="cart-item-emoji">${item.emoji}</span>
-      <div class="cart-item-info">
+      <span class="ci-emoji">${item.emoji}</span>
+      <div class="ci-info">
         <h4>${item.nom}</h4>
-        <p>${formatPrix(item.prix * item.qte)}</p>
+        <p>${fmt(item.prix * item.qte)}</p>
       </div>
-      <div class="cart-item-qty">
-        <button onclick="changerQuantite(${id}, -1)">−</button>
+      <div class="ci-qty">
+        <button onclick="changerQte('${id}',-1)">−</button>
         <span>${item.qte}</span>
-        <button onclick="changerQuantite(${id}, +1)">+</button>
+        <button onclick="changerQte('${id}',+1)">+</button>
       </div>
     </div>
   `).join("");
 
-  total.textContent = formatPrix(getTotalPrix());
-}
+  // Barre livraison gratuite
+  const SEUIL = 150000;
+  const total = totalPrix();
+  const reste = SEUIL - total;
+  let livraisonHTML = "";
+  if (reste > 0) {
+    const pct = Math.min(100, (total / SEUIL) * 100);
+    livraisonHTML = `<div class="livraison-bar">🚚 Plus que <strong>${fmt(reste)}</strong> pour la livraison gratuite !<div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></div>`;
+  } else {
+    livraisonHTML = `<div class="livraison-bar" style="background:#d1fae5;color:#065f46">🎉 Livraison gratuite offerte !</div>`;
+  }
 
-function formatPrix(prix) {
-  return prix.toLocaleString("fr-FR") + " Ar";
-}
-
-// ==========================================
-// NAVBAR SCROLL
-// ==========================================
-const navbar = document.getElementById("navbar");
-window.addEventListener("scroll", () => {
-  navbar.classList.toggle("scrolled", window.scrollY > 60);
-});
-
-// ==========================================
-// HAMBURGER / MENU MOBILE
-// ==========================================
-const hamburger = document.getElementById("hamburger");
-const mobileMenu = document.getElementById("mobileMenu");
-
-hamburger.addEventListener("click", () => {
-  mobileMenu.classList.toggle("open");
-  document.body.style.overflow = mobileMenu.classList.contains("open") ? "hidden" : "";
-});
-
-mobileMenu.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", () => {
-    mobileMenu.classList.remove("open");
-    document.body.style.overflow = "";
-  });
-});
-
-// ==========================================
-// BARRE DE RECHERCHE
-// ==========================================
-const searchBtn = document.getElementById("searchBtn");
-const searchBar = document.getElementById("searchBar");
-const searchClose = document.getElementById("searchClose");
-const searchInput = document.getElementById("searchInput");
-
-searchBtn.addEventListener("click", () => {
-  searchBar.classList.add("open");
-  searchInput.focus();
-});
-searchClose.addEventListener("click", () => {
-  searchBar.classList.remove("open");
-  searchInput.value = "";
-  filtrerParRecherche("");
-});
-
-searchInput.addEventListener("input", () => {
-  filtrerParRecherche(searchInput.value.trim().toLowerCase());
-});
-
-function filtrerParRecherche(terme) {
-  const cards = document.querySelectorAll(".produit-card");
-  cards.forEach(card => {
-    const nom = card.querySelector("h3").textContent.toLowerCase();
-    card.classList.toggle("hidden", terme !== "" && !nom.includes(terme));
-  });
-}
-
-// ==========================================
-// FILTRES CATÉGORIES
-// ==========================================
-const filtresBtns = document.querySelectorAll(".filtre-btn");
-filtresBtns.forEach(btn => {
-  btn.addEventListener("click", () => {
-    filtresBtns.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    const filtre = btn.dataset.filtre;
-    filtrerProduits(filtre);
-  });
-});
-
-function filtrerProduits(filtre) {
-  const cards = document.querySelectorAll(".produit-card");
-  cards.forEach(card => {
-    const cat = card.dataset.categorie;
-    if (filtre === "tous" || cat === filtre) {
-      card.classList.remove("hidden");
-      card.style.animation = "fadeUp 0.4s ease both";
-      setTimeout(() => { card.style.animation = ""; }, 400);
-    } else {
-      card.classList.add("hidden");
-    }
-  });
-}
-
-// Filtrer depuis les catégories
-document.querySelectorAll(".cat-card").forEach(catCard => {
-  catCard.addEventListener("click", () => {
-    const filtre = catCard.dataset.filter;
-    document.getElementById("produits").scrollIntoView({ behavior: "smooth" });
-    setTimeout(() => {
-      filtresBtns.forEach(b => b.classList.remove("active"));
-      const targetBtn = document.querySelector(`.filtre-btn[data-filtre="${filtre}"]`);
-      if (targetBtn) targetBtn.classList.add("active");
-      filtrerProduits(filtre);
-    }, 600);
-  });
-});
-
-// ==========================================
-// BOUTONS AJOUTER AU PANIER
-// ==========================================
-document.querySelectorAll(".btn-panier").forEach(btn => {
-  btn.addEventListener("click", (e) => {
-    const id = e.currentTarget.dataset.id;
-    const nom = e.currentTarget.dataset.nom;
-    const prix = e.currentTarget.dataset.prix;
-    ajouterAuPanier(id, nom, prix);
-
-    // Animation bouton
-    btn.textContent = "✓ Ajouté !";
-    btn.style.background = "#2e7d32";
-    btn.style.color = "#fff";
-    setTimeout(() => {
-      btn.textContent = "Ajouter au Panier";
-      btn.style.background = "";
-      btn.style.color = "";
-    }, 1600);
-  });
-});
-
-// ==========================================
-// MODAL DÉTAIL PRODUIT
-// ==========================================
-document.querySelectorAll(".btn-detail").forEach(btn => {
-  btn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const id = e.currentTarget.dataset.id;
-    const prod = produits[id];
-    if (!prod) return;
-    ouvrirModalDetail(id, prod);
-  });
-});
-
-function ouvrirModalDetail(id, prod) {
-  // Supprimer ancien modal s'il existe
-  const existing = document.getElementById("detailModal");
-  if (existing) existing.remove();
-
-  const modal = document.createElement("div");
-  modal.id = "detailModal";
-  modal.style.cssText = `
-    position:fixed;inset:0;z-index:2500;
-    background:rgba(0,0,0,0.6);
-    display:flex;align-items:center;justify-content:center;
-    padding:24px;backdrop-filter:blur(6px);
+  footer.innerHTML = livraisonHTML + `
+    <div class="total-row"><span>Sous-total</span><strong>${fmt(total)}</strong></div>
+    <button class="btn-primary btn-checkout" id="checkoutBtn">Commander maintenant →</button>
+    <p class="secure-msg">🔒 Paiement 100% sécurisé</p>
   `;
-  modal.innerHTML = `
-    <div style="
-      background:#fff;border-radius:20px;
-      max-width:500px;width:100%;
-      padding:40px;position:relative;
-      animation:fadeUp 0.35s ease;
-      box-shadow:0 30px 80px rgba(0,0,0,0.2);
-    ">
-      <button onclick="document.getElementById('detailModal').remove()" style="
-        position:absolute;top:16px;right:16px;
-        background:none;border:none;font-size:1.4rem;
-        cursor:pointer;color:#7a6040;
-      ">✕</button>
-      <div style="font-size:5rem;text-align:center;margin-bottom:24px;">${prod.emoji}</div>
-      <p style="color:#c9a84c;font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;">${prod.cat}</p>
-      <h2 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:#1a1208;margin-bottom:16px;">${prod.nom}</h2>
-      <p style="color:#5c3d1e;line-height:1.7;margin-bottom:24px;">${prod.desc}</p>
-      <p style="font-size:1.4rem;font-weight:700;color:#1a1208;margin-bottom:24px;">${formatPrix(prod.prix)}</p>
-      <button onclick="ajouterAuPanier(${id},'${prod.nom}',${prod.prix});document.getElementById('detailModal').remove();" style="
-        width:100%;background:#1a1208;color:#e8d49a;
-        border:none;font-size:1rem;font-weight:500;
-        padding:16px;border-radius:10px;cursor:pointer;
-        font-family:'DM Sans',sans-serif;
-        transition:background 0.3s;
-      " onmouseover="this.style.background='#c9a84c';this.style.color='#1a1208';"
-         onmouseout="this.style.background='#1a1208';this.style.color='#e8d49a';">
-        Ajouter au Panier
-      </button>
-    </div>
-  `;
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) modal.remove();
-  });
-  document.body.appendChild(modal);
+  footer.classList.add("show");
+
+  // Rebind checkout
+  document.getElementById("checkoutBtn").onclick = passerCommande;
 }
 
-// ==========================================
-// PANIER MODAL
-// ==========================================
-const cartBtn = document.getElementById("cartBtn");
-const cartModal = document.getElementById("cartModal");
-const cartClose = document.getElementById("cartClose");
+function passerCommande() {
+  panier = {};
+  savePanier();
+  majCartBadge();
+  renderPanier();
+  fermerPanier();
+  toast("🎉 Commande passée avec succès ! Merci de votre confiance !");
+}
 
-cartBtn.addEventListener("click", () => {
-  afficherPanier();
-  cartModal.classList.add("open");
+/* =========================================
+   OUVERTURE / FERMETURE PANIER
+   ========================================= */
+function ouvrirPanier() {
+  renderPanier();
+  document.getElementById("cartDrawer").classList.add("open");
+  document.getElementById("drawerOverlay").classList.add("show");
   document.body.style.overflow = "hidden";
-});
-cartClose.addEventListener("click", fermerPanier);
-cartModal.addEventListener("click", (e) => {
-  if (e.target === cartModal) fermerPanier();
-});
-
+}
 function fermerPanier() {
-  cartModal.classList.remove("open");
+  document.getElementById("cartDrawer").classList.remove("open");
+  document.getElementById("drawerOverlay").classList.remove("show");
   document.body.style.overflow = "";
 }
 
-// Commande
-document.getElementById("checkoutBtn").addEventListener("click", () => {
-  if (getTotalItems() === 0) {
-    afficherToast("⚠️ Votre panier est vide !");
-    return;
+document.getElementById("cartBtn").onclick = ouvrirPanier;
+document.getElementById("cartClose").onclick = fermerPanier;
+document.getElementById("drawerOverlay").onclick = fermerPanier;
+
+/* =========================================
+   MODAL PRODUIT
+   ========================================= */
+function ouvrirModal(id) {
+  id = String(id);
+  const p = PRODUITS[id];
+  if (!p) return;
+  const ancienHtml = p.ancien ? `<span class="modal-old">${fmt(p.ancien)}</span>` : "";
+  document.getElementById("modalContent").innerHTML = `
+    <div class="modal-emoji">${p.emoji}</div>
+    <p class="modal-cat">${p.cat}</p>
+    <h2 class="modal-title">${p.nom}</h2>
+    <div class="modal-stars">${p.stars} <small style="color:#6b6b9c;font-size:.82rem">(${p.avis} avis)</small></div>
+    <p class="modal-desc">${p.desc}</p>
+    <div class="modal-prix">${fmt(p.prix)} ${ancienHtml}</div>
+    <button class="btn-primary modal-btn" onclick="ajouterPanier(${id});fermerModal()">
+      Ajouter au panier
+    </button>
+  `;
+  document.getElementById("modalOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function fermerModal() {
+  document.getElementById("modalOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+document.getElementById("modalClose").onclick = fermerModal;
+document.getElementById("modalOverlay").onclick = function(e) { if(e.target === this) fermerModal(); };
+
+/* =========================================
+   FAVORIS (wishlist)
+   ========================================= */
+function toggleFavori(id, btn) {
+  id = String(id);
+  if (favoris.has(id)) {
+    favoris.delete(id);
+    btn.textContent = "♡";
+    btn.classList.remove("wished");
+    toast("Retiré des favoris");
+  } else {
+    favoris.add(id);
+    btn.textContent = "♥";
+    btn.classList.add("wished");
+    btn.style.color = "#ef4444";
+    toast("❤️ Ajouté aux favoris !");
   }
-  panier = {};
-  sauvegarderPanier();
-  majCartCount();
-  afficherPanier();
-  fermerPanier();
-  afficherToast("🎉 Commande passée avec succès ! Merci !");
+  saveFavoris();
+}
+
+/* =========================================
+   FILTRES PRODUITS
+   ========================================= */
+function filtrerProduits(filtre) {
+  document.querySelectorAll(".produit-card").forEach(card => {
+    const cat = card.dataset.categorie;
+    const visible = filtre === "tous" || cat === filtre;
+    card.classList.toggle("hidden", !visible);
+    if (visible) {
+      card.style.animation = "none";
+      requestAnimationFrame(() => { card.style.animation = ""; });
+    }
+  });
+}
+
+document.querySelectorAll(".filtre-btn").forEach(btn => {
+  btn.onclick = function() {
+    document.querySelectorAll(".filtre-btn").forEach(b => b.classList.remove("active"));
+    this.classList.add("active");
+    filtrerProduits(this.dataset.filtre);
+  };
 });
 
-// ==========================================
-// FORMULAIRE CONTACT
-// ==========================================
-document.getElementById("contactForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const nom = document.getElementById("nomInput").value.trim();
-  const email = document.getElementById("emailInput").value.trim();
-  const msg = document.getElementById("msgInput").value.trim();
+document.querySelectorAll(".cat-card").forEach(card => {
+  card.onclick = function() {
+    const filtre = this.dataset.filtre;
+    document.getElementById("produits").scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      document.querySelectorAll(".filtre-btn").forEach(b => b.classList.remove("active"));
+      const target = document.querySelector(`.filtre-btn[data-filtre="${filtre}"]`);
+      if (target) target.classList.add("active");
+      filtrerProduits(filtre);
+    }, 600);
+  };
+});
 
-  if (!nom || !email || !msg) {
-    afficherToast("⚠️ Veuillez remplir tous les champs.");
+/* =========================================
+   DÉLÉGATION D'ÉVÉNEMENTS — PRODUITS
+   ========================================= */
+document.getElementById("produitsGrid").addEventListener("click", function(e) {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+
+  // Bouton ajouter au panier
+  if (btn.classList.contains("btn-panier")) {
+    const id = btn.dataset.id;
+    ajouterPanier(id);
+    btn.classList.add("added");
+    btn.innerHTML = "✓ Ajouté !";
+    setTimeout(() => {
+      btn.classList.remove("added");
+      btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg> Ajouter au panier`;
+    }, 1800);
     return;
   }
 
-  // Simulation envoi
-  const submitBtn = e.currentTarget.querySelector("button[type=submit]");
-  submitBtn.textContent = "Envoi en cours...";
-  submitBtn.disabled = true;
+  // Bouton détail produit
+  if (btn.classList.contains("btn-detail")) {
+    ouvrirModal(btn.dataset.id);
+    return;
+  }
+
+  // Bouton favori
+  if (btn.classList.contains("btn-wish")) {
+    toggleFavori(btn.dataset.id, btn);
+    return;
+  }
+});
+
+// Restaurer l'état des favoris au chargement
+favoris.forEach(id => {
+  const btn = document.querySelector(`.btn-wish[data-id="${id}"]`);
+  if (btn) { btn.textContent = "♥"; btn.classList.add("wished"); btn.style.color = "#ef4444"; }
+});
+
+/* =========================================
+   RECHERCHE
+   ========================================= */
+function ouvrirRecherche() {
+  document.getElementById("searchOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+  setTimeout(() => document.getElementById("searchInput").focus(), 150);
+}
+function fermerRecherche() {
+  document.getElementById("searchOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+  document.getElementById("searchInput").value = "";
+  document.getElementById("searchResults").innerHTML = "";
+}
+
+document.getElementById("searchBtn").onclick = ouvrirRecherche;
+document.getElementById("searchClose").onclick = fermerRecherche;
+document.getElementById("searchOverlay").onclick = function(e) { if(e.target === this) fermerRecherche(); };
+
+document.getElementById("searchInput").addEventListener("input", function() {
+  const q = this.value.trim().toLowerCase();
+  const zone = document.getElementById("searchResults");
+  if (!q) { zone.innerHTML = ""; return; }
+
+  const results = Object.entries(PRODUITS).filter(([id, p]) =>
+    p.nom.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q)
+  );
+
+  if (results.length === 0) {
+    zone.innerHTML = `<div class="search-empty">Aucun résultat pour « ${q} »</div>`;
+    return;
+  }
+
+  zone.innerHTML = results.map(([id, p]) => `
+    <div class="search-result-item" onclick="fermerRecherche();ouvrirModal(${id})">
+      <span class="sri-emoji">${p.emoji}</span>
+      <div class="sri-info">
+        <h4>${p.nom}</h4>
+        <p>${fmt(p.prix)}</p>
+      </div>
+    </div>
+  `).join("");
+});
+
+/* =========================================
+   MENU MOBILE
+   ========================================= */
+document.getElementById("hamburger").onclick = function() {
+  document.getElementById("mobileMenu").classList.add("open");
+  document.getElementById("mobileOverlay").classList.add("show");
+  document.body.style.overflow = "hidden";
+};
+function fermerMobile() {
+  document.getElementById("mobileMenu").classList.remove("open");
+  document.getElementById("mobileOverlay").classList.remove("show");
+  document.body.style.overflow = "";
+}
+document.getElementById("mobileClose").onclick = fermerMobile;
+document.getElementById("mobileOverlay").onclick = fermerMobile;
+document.querySelectorAll(".mobile-link").forEach(l => {
+  l.onclick = fermerMobile;
+});
+
+/* =========================================
+   NAVBAR SCROLL
+   ========================================= */
+window.addEventListener("scroll", function() {
+  document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 50);
+  document.getElementById("btnTop").classList.toggle("show", window.scrollY > 400);
+});
+
+/* =========================================
+   BACK TO TOP
+   ========================================= */
+document.getElementById("btnTop").onclick = function() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+/* =========================================
+   FORMULAIRE CONTACT
+   ========================================= */
+document.getElementById("contactForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const nom   = document.getElementById("nomInput").value.trim();
+  const email = document.getElementById("emailInput").value.trim();
+  const msg   = document.getElementById("msgInput").value.trim();
+
+  if (!nom || !email || !msg) { toast("⚠️ Veuillez remplir les champs obligatoires."); return; }
+
+  const btn = document.getElementById("submitBtn");
+  btn.textContent = "Envoi en cours...";
+  btn.disabled = true;
 
   setTimeout(() => {
-    document.getElementById("formSuccess").classList.add("show");
-    e.target.reset();
-    submitBtn.textContent = "Envoyer le Message";
-    submitBtn.disabled = false;
-    afficherToast("✓ Message envoyé !");
-    setTimeout(() => {
-      document.getElementById("formSuccess").classList.remove("show");
-    }, 4000);
+    const ok = document.getElementById("formSuccess");
+    ok.classList.add("show");
+    this.reset();
+    btn.innerHTML = 'Envoyer le message <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+    btn.disabled = false;
+    toast("✓ Message envoyé avec succès !");
+    setTimeout(() => ok.classList.remove("show"), 5000);
   }, 1200);
 });
 
-// ==========================================
-// TOAST NOTIFICATION
-// ==========================================
-let toastTimeout;
-function afficherToast(message) {
-  const toast = document.getElementById("toast");
-  toast.textContent = message;
-  toast.classList.add("show");
-  clearTimeout(toastTimeout);
-  toastTimeout = setTimeout(() => toast.classList.remove("show"), 3000);
-}
+/* =========================================
+   NEWSLETTER
+   ========================================= */
+document.getElementById("newsletterForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const email = document.getElementById("nlEmail").value.trim();
+  if (!email) return;
+  this.reset();
+  toast("🎉 Merci ! Vous êtes bien inscrit(e) à notre newsletter.");
+});
 
-// ==========================================
-// ANIMATIONS AU SCROLL (Intersection Observer)
-// ==========================================
-const observerOptions = { threshold: 0.12, rootMargin: "0px 0px -40px 0px" };
+/* =========================================
+   ANIMATIONS AU SCROLL
+   ========================================= */
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry, i) => {
     if (entry.isIntersecting) {
-      setTimeout(() => {
-        entry.target.classList.add("visible");
-      }, i * 80);
+      setTimeout(() => entry.target.classList.add("in"), i * 70);
       observer.unobserve(entry.target);
     }
   });
-}, observerOptions);
+}, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
 
-// Appliquer fade-up aux éléments clés
-const elementsAnimer = [
-  ".produit-card",
-  ".cat-card",
-  ".apropos-texte",
-  ".apropos-visuel",
-  ".contact-infos",
-  ".contact-form",
-  ".stat",
-  ".section-header",
-];
-elementsAnimer.forEach(selector => {
-  document.querySelectorAll(selector).forEach(el => {
-    el.classList.add("fade-up");
-    observer.observe(el);
-  });
+document.querySelectorAll(
+  ".produit-card, .cat-card, .section-header, .apropos-text, .contact-infos, .contact-form, .a-stat, .nl-inner, .promo-inner"
+).forEach(el => {
+  el.classList.add("fade-up");
+  observer.observe(el);
 });
 
-// ==========================================
-// INITIALISATION
-// ==========================================
-document.addEventListener("DOMContentLoaded", () => {
-  majCartCount();
-
-  // Fermer menu mobile au clic extérieur
-  document.addEventListener("click", (e) => {
-    if (mobileMenu.classList.contains("open") &&
-        !mobileMenu.contains(e.target) &&
-        !hamburger.contains(e.target)) {
-      mobileMenu.classList.remove("open");
-      document.body.style.overflow = "";
-    }
-  });
-
-  // Fermer recherche avec Echap
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      searchBar.classList.remove("open");
-      cartModal.classList.remove("open");
-      document.body.style.overflow = "";
-      const detailModal = document.getElementById("detailModal");
-      if (detailModal) detailModal.remove();
-    }
-  });
-
-  // Smooth scroll pour les liens
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener("click", (e) => {
-      const href = anchor.getAttribute("href");
-      if (href === "#") return;
-      const target = document.querySelector(href);
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    });
-  });
-
-  console.log("✅ LUXE SHOP chargé avec succès !");
+/* =========================================
+   ECHAP — ferme tout
+   ========================================= */
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape") {
+    fermerModal();
+    fermerPanier();
+    fermerRecherche();
+    fermerMobile();
+  }
 });
+
+/* =========================================
+   TOAST
+   ========================================= */
+function toast(msg) {
+  const zone = document.getElementById("toastZone");
+  const el = document.createElement("div");
+  el.className = "toast";
+  el.textContent = msg;
+  zone.appendChild(el);
+  setTimeout(() => el.remove(), 3200);
+}
+
+/* =========================================
+   FORMAT PRIX
+   ========================================= */
+function fmt(n) { return Number(n).toLocaleString("fr-FR") + " Ar"; }
+
+/* =========================================
+   INIT
+   ========================================= */
+majCartBadge();
+console.log("✅ Fy Riah — site chargé avec succès !");
