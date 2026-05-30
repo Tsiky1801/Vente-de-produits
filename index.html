@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUXE SHOP — Boutique en Ligne</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar" id="navbar">
+    <div class="nav-logo">LUXE<span>SHOP</span></div>
+    <nav class="nav-links">
+      <a href="#accueil">Accueil</a>
+      <a href="#produits">Produits</a>
+      <a href="#apropos">À Propos</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="btn-search" id="searchBtn" aria-label="Recherche">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <button class="btn-cart" id="cartBtn" aria-label="Panier">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#accueil">Accueil</a>
+    <a href="#produits">Produits</a>
+    <a href="#apropos">À Propos</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-bar" id="searchBar">
+    <input type="text" id="searchInput" placeholder="Rechercher un produit..." />
+    <button id="searchClose">✕</button>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="accueil">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-tag">Nouvelle Collection 2025</p>
+      <h1 class="hero-title">L'Art du<br/><em>Shopping</em> Raffiné</h1>
+      <p class="hero-sub">Découvrez des produits soigneusement sélectionnés pour votre style de vie moderne.</p>
+      <div class="hero-btns">
+        <a href="#produits" class="btn-primary">Découvrir</a>
+        <a href="#apropos" class="btn-ghost">En savoir plus</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span>Défiler</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ===== CATEGORIES ===== -->
+  <section class="categories">
+    <div class="container">
+      <div class="cat-grid">
+        <div class="cat-card" data-filter="mode">
+          <div class="cat-icon">👗</div>
+          <h3>Mode</h3>
+          <p>Vêtements & Accessoires</p>
+        </div>
+        <div class="cat-card" data-filter="beaute">
+          <div class="cat-icon">✨</div>
+          <h3>Beauté</h3>
+          <p>Soins & Cosmétiques</p>
+        </div>
+        <div class="cat-card" data-filter="maison">
+          <div class="cat-icon">🏡</div>
+          <h3>Maison</h3>
+          <p>Déco & Art de Vivre</p>
+        </div>
+        <div class="cat-card" data-filter="tech">
+          <div class="cat-icon">💻</div>
+          <h3>Tech</h3>
+          <p>Gadgets & Électronique</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRODUITS ===== -->
+  <section class="produits" id="produits">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-tag">Notre Sélection</p>
+        <h2>Produits Phares</h2>
+      </div>
+
+      <!-- Filtres -->
+      <div class="filtres">
+        <button class="filtre-btn active" data-filtre="tous">Tous</button>
+        <button class="filtre-btn" data-filtre="mode">Mode</button>
+        <button class="filtre-btn" data-filtre="beaute">Beauté</button>
+        <button class="filtre-btn" data-filtre="maison">Maison</button>
+        <button class="filtre-btn" data-filtre="tech">Tech</button>
+      </div>
+
+      <!-- Grille produits -->
+      <div class="produits-grid" id="produitsGrid">
+
+        <!-- Produit 1 -->
+        <div class="produit-card" data-categorie="mode">
+          <div class="produit-img" style="background: linear-gradient(135deg,#f5e6d3,#e8cba8)">
+            <span class="produit-emoji">👗</span>
+            <span class="badge">Nouveau</span>
+            <div class="produit-overlay">
+              <button class="btn-detail" data-id="1">Voir détails</button>
+            </div>
+          </div>
+          <div class="produit-info">
+            <span class="produit-cat">Mode</span>
+            <h3>Robe Élégante Dorée</h3>
+            <div class="produit-prix">
+              <span class="prix-actuel">89 000 Ar</span>
+              <span class="prix-ancien">110 000 Ar</span>
+            </div>
+            <div class="produit-stars">★★★★☆ <span>(42)</span></div>
+            <button class="btn-panier" data-id="1" data-nom="Robe Élégante Dorée" data-prix="89000">Ajouter au Panier</button>
+          </div>
+        </div>
+
+        <!-- Produit 2 -->
+        <div class="produit-card" data-categorie="beaute">
+          <div class="produit-img" style="background: linear-gradient(135deg,#fce4ec,#f8bbd9)">
+            <span class="produit-emoji">✨</span>
+            <span class="badge badge-promo">-20%</span>
+            <div class="produit-overlay">
+              <button class="btn-detail" data-id="2">Voir détails</button>
+            </div>
+          </div>
+          <div class="produit-info">
+            <span class="produit-cat">Beauté</span>
+            <h3>Sérum Éclat Naturel</h3>
+            <div class="produit-prix">
+              <span class="prix-actuel">45 000 Ar</span>
+              <span class="prix-ancien">56 000 Ar</span>
+            </div>
+            <div class="produit-stars">★★★★★ <span>(89)</span></div>
+            <button class="btn-panier" data-id="2" data-nom="Sérum Éclat Naturel" data-prix="45000">Ajouter au Panier</button>
+          </div>
+        </div>
+
+        <!-- Produit 3 -->
+        <div class="produit-card" data-categorie="maison">
+          <div class="produit-img" style="background: linear-gradient(135deg,#e8f5e9,#c8e6c9)">
+            <span class="produit-emoji">🏡</span>
+            <div class="produit-overlay">
+              <button class="btn-detail" data-id="3">Voir détails</button>
+            </div>
+          </div>
+          <div class="produit-info">
+            <span class="produit-cat">Maison</span>
+            <h3>Vase Céramique Artisan</h3>
+            <div class="produit-prix">
+              <span class="prix-actuel">62 000 Ar</span>
+            </div>
+            <div class="produit-stars">★★★★☆ <span>(31)</span></div>
+            <button class="btn-panier" data-id="3" data-nom="Vase Céramique Artisan" data-prix="62000">Ajouter au Panier</button>
+          </div>
+        </div>
+
+        <!-- Produit 4 -->
+        <div class="produit-card" data-categorie="tech">
+          <div class="produit-img" style="background: linear-gradient(135deg,#e3f2fd,#bbdefb)">
+            <span class="produit-emoji">🎧</span>
+            <span class="badge badge-hot">Populaire</span>
+            <div class="produit-overlay">
+              <button class="btn-detail" data-id="4">Voir détails</button>
+            </div>
+          </div>
+          <div class="produit-info">
+            <span class="produit-cat">Tech</span>
+            <h3>Casque Audio Premium</h3>
+            <div class="produit-prix">
+              <span class="prix-actuel">185 000 Ar</span>
+              <span class="prix-ancien">220 000 Ar</span>
+            </div>
+            <div class="produit-stars">★★★★★ <span>(156)</span></div>
+            <button class="btn-panier" data-id="4" data-nom="Casque Audio Premium" data-prix="185000">Ajouter au Panier</button>
+          </div>
+        </div>
+
+        <!-- Produit 5 -->
+        <div class="produit-card" data-categorie="mode">
+          <div class="produit-img" style="background: linear-gradient(135deg,#f3e5f5,#ce93d8)">
+            <span class="produit-emoji">👜</span>
+            <div class="produit-overlay">
+              <button class="btn-detail" data-id="5">Voir détails</button>
+            </div>
+          </div>
+          <div class="produit-info">
+            <span class="produit-cat">Mode</span>
+            <h3>Sac à Main Luxe</h3>
+            <div class="produit-prix">
+              <span class="prix-actuel">135 000 Ar</span>
+            </div>
+            <div class="produit-stars">★★★★☆ <span>(67)</span></div>
+            <button class="btn-panier" data-id="5" data-nom="Sac à Main Luxe" data-prix="135000">Ajouter au Panier</button>
+          </div>
+        </div>
+
+        <!-- Produit 6 -->
+        <div class="produit-card" data-categorie="tech">
+          <div class="produit-img" style="background: linear-gradient(135deg,#fff8e1,#ffe082)">
+            <span class="produit-emoji">⌚</span>
+            <span class="badge">Nouveau</span>
+            <div class="produit-overlay">
+              <button class="btn-detail" data-id="6">Voir détails</button>
+            </div>
+          </div>
+          <div class="produit-info">
+            <span class="produit-cat">Tech</span>
+            <h3>Montre Connectée Or</h3>
+            <div class="produit-prix">
+              <span class="prix-actuel">250 000 Ar</span>
+              <span class="prix-ancien">300 000 Ar</span>
+            </div>
+            <div class="produit-stars">★★★★★ <span>(203)</span></div>
+            <button class="btn-panier" data-id="6" data-nom="Montre Connectée Or" data-prix="250000">Ajouter au Panier</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROMO BANNER ===== -->
+  <section class="promo-banner">
+    <div class="container">
+      <div class="promo-content">
+        <h2>Livraison Gratuite</h2>
+        <p>Pour toute commande supérieure à <strong>150 000 Ar</strong></p>
+        <a href="#produits" class="btn-primary">J'en profite</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== À PROPOS ===== -->
+  <section class="apropos" id="apropos">
+    <div class="container">
+      <div class="apropos-grid">
+        <div class="apropos-visuel">
+          <div class="apropos-img-block">
+            <span>🛍️</span>
+          </div>
+        </div>
+        <div class="apropos-texte">
+          <p class="section-tag">Notre Histoire</p>
+          <h2>Pourquoi Nous Choisir ?</h2>
+          <p>Chez <strong>LUXE SHOP</strong>, nous croyons que chaque achat est une expérience. Depuis notre création, nous sélectionnons avec soin les produits les plus raffinés pour vous offrir le meilleur.</p>
+          <ul class="apropos-list">
+            <li><span>✓</span> Produits certifiés et de haute qualité</li>
+            <li><span>✓</span> Livraison rapide partout à Madagascar</li>
+            <li><span>✓</span> Service client disponible 7j/7</li>
+            <li><span>✓</span> Retours gratuits sous 30 jours</li>
+          </ul>
+          <div class="apropos-stats">
+            <div class="stat"><strong>5K+</strong><span>Clients Satisfaits</span></div>
+            <div class="stat"><strong>200+</strong><span>Produits</span></div>
+            <div class="stat"><strong>98%</strong><span>Satisfaction</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-tag">Contactez-nous</p>
+        <h2>On est là pour Vous</h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-infos">
+          <div class="contact-item">
+            <span>📍</span>
+            <div>
+              <h4>Adresse</h4>
+              <p>Antananarivo, Madagascar</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span>📞</span>
+            <div>
+              <h4>Téléphone</h4>
+              <p>+261 34 00 000 00</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span>✉️</span>
+            <div>
+              <h4>Email</h4>
+              <p>contact@luxeshop.mg</p>
+            </div>
+          </div>
+        </div>
+        <form class="contact-form" id="contactForm">
+          <div class="form-group">
+            <input type="text" id="nomInput" placeholder="Votre nom" required />
+          </div>
+          <div class="form-group">
+            <input type="email" id="emailInput" placeholder="Votre email" required />
+          </div>
+          <div class="form-group">
+            <textarea id="msgInput" placeholder="Votre message..." rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn-primary">Envoyer le Message</button>
+          <p class="form-success" id="formSuccess">✓ Message envoyé avec succès !</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="nav-logo">LUXE<span>SHOP</span></div>
+          <p>Votre destination shopping premium à Madagascar.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Navigation</h4>
+          <a href="#accueil">Accueil</a>
+          <a href="#produits">Produits</a>
+          <a href="#apropos">À Propos</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="footer-links">
+          <h4>Politique</h4>
+          <a href="#">Livraison</a>
+          <a href="#">Retours</a>
+          <a href="#">Confidentialité</a>
+          <a href="#">CGV</a>
+        </div>
+        <div class="footer-social">
+          <h4>Réseaux Sociaux</h4>
+          <div class="social-icons">
+            <a href="#" aria-label="Facebook">📘</a>
+            <a href="#" aria-label="Instagram">📸</a>
+            <a href="#" aria-label="WhatsApp">💬</a>
+            <a href="#" aria-label="TikTok">🎵</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 LUXE SHOP. Tous droits réservés. Fait avec ❤️ à Madagascar.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== PANIER MODAL ===== -->
+  <div class="cart-modal" id="cartModal">
+    <div class="cart-panel">
+      <div class="cart-header">
+        <h3>Mon Panier</h3>
+        <button id="cartClose">✕</button>
+      </div>
+      <div class="cart-body" id="cartBody">
+        <p class="cart-vide">Votre panier est vide.</p>
+      </div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total :</span>
+          <strong id="cartTotal">0 Ar</strong>
+        </div>
+        <button class="btn-primary w100" id="checkoutBtn">Commander</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== NOTIFICATION TOAST ===== -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
