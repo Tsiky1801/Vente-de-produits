@@ -1,568 +1,590 @@
-/* ===================================================================
-   FY RIAH — SCRIPT.JS
-   Logique complète du site : catalogue, panier, recherche, filtres,
-   formulaires, menu mobile, animations au défilement.
-   =================================================================== */
+V/**
+ * FY RIAH — script.js
+ * Panier, recherche, filtres, navigation, formulaires, animations
+ */
 
-(function () {
-  'use strict';
+/* ══════════════════════════════════════════
+   1. DONNÉES PRODUITS (12 articles)
+══════════════════════════════════════════ */
+const PRODUCTS = [
+  {
+    id: 1,
+    name: "Robe Velours Aubergine",
+    category: "robes",
+    price: 129,
+    oldPrice: 159,
+    rating: 4.9,
+    reviews: 312,
+    badge: "Promo",
+    popular: true,
+    rank: 1,
+    desc: "Velours doux au toucher, col en V élégant, manches longues légèrement évasées.",
+    color: "linear-gradient(135deg,#4A0E82,#A855F7,#6B21A8)",
+  },
+  {
+    id: 2,
+    name: "Blazer Lilas Structuré",
+    category: "hauts",
+    price: 185,
+    oldPrice: null,
+    rating: 4.8,
+    reviews: 198,
+    badge: "Nouveau",
+    popular: true,
+    rank: 2,
+    desc: "Coupe droite moderne, doublure soie, boutons dorés, poches fonctionnelles.",
+    color: "linear-gradient(135deg,#C084FC,#7C3AED,#A855F7)",
+  },
+  {
+    id: 3,
+    name: "Sac Cabas Cuir Prune",
+    category: "sacs",
+    price: 219,
+    oldPrice: 249,
+    rating: 4.9,
+    reviews: 421,
+    badge: "Best-seller",
+    popular: true,
+    rank: 3,
+    desc: "Cuir pleine fleur, fermeture magnétique, bandoulière amovible, compartiments intérieurs.",
+    color: "linear-gradient(135deg,#581C87,#7C3AED,#EC4899)",
+  },
+  {
+    id: 4,
+    name: "Robe Midi Florale Violette",
+    category: "robes",
+    price: 99,
+    oldPrice: 115,
+    rating: 4.7,
+    reviews: 287,
+    badge: "Promo",
+    popular: false,
+    rank: null,
+    desc: "Viscose fluide, imprimé floral exclusif, taille empire, longueur midi parfaite.",
+    color: "linear-gradient(135deg,#6B21A8,#EC4899,#A855F7)",
+  },
+  {
+    id: 5,
+    name: "Top en Soie Mauve",
+    category: "hauts",
+    price: 78,
+    oldPrice: null,
+    rating: 4.6,
+    reviews: 143,
+    badge: "Nouveau",
+    popular: false,
+    rank: null,
+    desc: "100% soie de mûrier, col bénitier, couleur mauve poudré, coupe légèrement ample.",
+    color: "linear-gradient(135deg,#E9D5FF,#C084FC,#A855F7)",
+  },
+  {
+    id: 6,
+    name: "Pochette Satin Lavande",
+    category: "accessoires",
+    price: 65,
+    oldPrice: null,
+    rating: 4.8,
+    reviews: 89,
+    badge: null,
+    popular: false,
+    rank: null,
+    desc: "Satin duchesse, fermeture clip dorée, format soirée parfait, livrée en boîte cadeau.",
+    color: "linear-gradient(135deg,#C084FC,#E9D5FF,#A855F7)",
+  },
+  {
+    id: 7,
+    name: "Robe Longue Wrap Violet",
+    category: "robes",
+    price: 145,
+    oldPrice: 175,
+    rating: 4.9,
+    reviews: 356,
+    badge: "Promo",
+    popular: true,
+    rank: 4,
+    desc: "Style portefeuille réglable, imprimé géométrique violet, parfaite du bureau à la soirée.",
+    color: "linear-gradient(135deg,#2D0A50,#7C3AED,#C084FC)",
+  },
+  {
+    id: 8,
+    name: "Ceinture Cuir Améthyste",
+    category: "accessoires",
+    price: 49,
+    oldPrice: null,
+    rating: 4.5,
+    reviews: 67,
+    badge: null,
+    popular: false,
+    rank: null,
+    desc: "Cuir véritable, boucle rectangulaire argentée, trois tailles de trou ajustables.",
+    color: "linear-gradient(135deg,#4A0E82,#7C3AED,#6B21A8)",
+  },
+  {
+    id: 9,
+    name: "Sac à Main Trapèze",
+    category: "sacs",
+    price: 169,
+    oldPrice: null,
+    rating: 4.7,
+    reviews: 201,
+    badge: "Nouveau",
+    popular: true,
+    rank: 5,
+    desc: "Forme trapèze tendance, cuir souple violet nuit, chaîne dorée amovible, poche zippée.",
+    color: "linear-gradient(135deg,#1E0733,#6B21A8,#A855F7)",
+  },
+  {
+    id: 10,
+    name: "Blouse Mousseline Iris",
+    category: "hauts",
+    price: 89,
+    oldPrice: 105,
+    rating: 4.6,
+    reviews: 178,
+    badge: "Promo",
+    popular: false,
+    rank: null,
+    desc: "Mousseline transparente légère, col lavallière, manches papillon, coloration iris unique.",
+    color: "linear-gradient(135deg,#7C3AED,#C084FC,#EC4899)",
+  },
+  {
+    id: 11,
+    name: "Foulard en Soie Violette",
+    category: "accessoires",
+    price: 55,
+    oldPrice: null,
+    rating: 4.8,
+    reviews: 112,
+    badge: null,
+    popular: false,
+    rank: null,
+    desc: "Soie twill 90×90 cm, motif cachemire exclusif Fy Riah, ourlets main, livré en coffret.",
+    color: "linear-gradient(135deg,#A855F7,#7C3AED,#E9D5FF)",
+  },
+  {
+    id: 12,
+    name: "Ensemble Tailleur Violet Nuit",
+    category: "hauts",
+    price: 245,
+    oldPrice: 295,
+    rating: 5.0,
+    reviews: 94,
+    badge: "Promo",
+    popular: true,
+    rank: 6,
+    desc: "Veste croisée + pantalon taille haute, laine mélangée premium, finitions satin sur les revers.",
+    color: "linear-gradient(135deg,#1E0733,#4A0E82,#6B21A8)",
+  },
+];
 
-  /* =================================================================
-     1. DONNÉES PRODUITS (démo — 14 articles)
-     ================================================================= */
-  const products = [
-    { id: 1,  name: "Robe Soirée Améthyste",      category: "mode",        categoryLabel: "Mode",        price: 89000,  oldPrice: 120000, rating: 4.8, reviews: 124, badge: "promo",      popular: true,  icon: "fa-solid fa-person-dress",      description: "Robe longue fluide en satin violet, idéale pour vos soirées élégantes." },
-    { id: 2,  name: "Sac à Main Cuir Violet",      category: "accessoires", categoryLabel: "Accessoires", price: 150000, oldPrice: null,   rating: 4.9, reviews: 98,  badge: "new",        popular: true,  icon: "fa-solid fa-bag-shopping",      description: "Sac en cuir véritable, finitions soignées et compartiment intérieur zippé." },
-    { id: 3,  name: "Montre Élégance Noire",       category: "accessoires", categoryLabel: "Accessoires", price: 185000, oldPrice: 230000, rating: 4.7, reviews: 76,  badge: "promo",      popular: true,  icon: "fa-solid fa-clock",             description: "Montre au boîtier noir mat et bracelet acier, pour un style intemporel." },
-    { id: 4,  name: "Parfum Améthyste Intense",    category: "beaute",      categoryLabel: "Beauté",      price: 65000,  oldPrice: null,   rating: 4.9, reviews: 210, badge: "bestseller", popular: true,  icon: "fa-solid fa-spray-can-sparkles",description: "Eau de parfum boisée et florale, sillage longue durée." },
-    { id: 5,  name: "Chemise Lin Blanche Premium", category: "mode",        categoryLabel: "Mode",        price: 55000,  oldPrice: null,   rating: 4.5, reviews: 61,  badge: null,         popular: false, icon: "fa-solid fa-shirt",             description: "Chemise en lin respirant, coupe ajustée pour toutes les occasions." },
-    { id: 6,  name: "Collier Pendentif Violine",   category: "accessoires", categoryLabel: "Accessoires", price: 45000,  oldPrice: 58000,  rating: 4.8, reviews: 143, badge: "promo",      popular: true,  icon: "fa-solid fa-gem",               description: "Collier fin avec pendentif serti d'une pierre violette facettée." },
-    { id: 7,  name: "Crème Hydratante Éclat",      category: "beaute",      categoryLabel: "Beauté",      price: 38000,  oldPrice: null,   rating: 4.6, reviews: 87,  badge: null,         popular: false, icon: "fa-solid fa-droplet",           description: "Soin visage hydratant à l'acide hyaluronique, pour une peau repulpée." },
-    { id: 8,  name: "Blazer Tailleur Premium",     category: "mode",        categoryLabel: "Mode",        price: 175000, oldPrice: null,   rating: 4.7, reviews: 54,  badge: "new",        popular: false, icon: "fa-solid fa-vest",              description: "Blazer structuré à la coupe impeccable, parfait du bureau aux soirées." },
-    { id: 9,  name: "Lunettes de Soleil Glam",     category: "accessoires", categoryLabel: "Accessoires", price: 60000,  oldPrice: null,   rating: 4.4, reviews: 39,  badge: null,         popular: false, icon: "fa-solid fa-glasses",           description: "Monture tendance avec verres polarisés anti-UV." },
-    { id: 10, name: "Coussin Velours Royal",       category: "maison",      categoryLabel: "Maison",      price: 32000,  oldPrice: 42000,  rating: 4.5, reviews: 28,  badge: "promo",      popular: false, icon: "fa-solid fa-couch",             description: "Coussin en velours doux, parfait pour sublimer votre salon." },
-    { id: 11, name: "Bougie Parfumée Lavande",     category: "maison",      categoryLabel: "Maison",      price: 28000,  oldPrice: null,   rating: 4.6, reviews: 45,  badge: null,         popular: false, icon: "fa-solid fa-fire",              description: "Bougie artisanale à la cire végétale, notes apaisantes de lavande." },
-    { id: 12, name: "Écharpe Soie Imprimée",       category: "mode",        categoryLabel: "Mode",        price: 47000,  oldPrice: null,   rating: 4.3, reviews: 22,  badge: null,         popular: false, icon: "fa-solid fa-ribbon",            description: "Écharpe en soie douce à motifs exclusifs, légère en toute saison." },
-    { id: 13, name: "Bracelet Manchette Violet",   category: "accessoires", categoryLabel: "Accessoires", price: 52000,  oldPrice: 65000,  rating: 4.7, reviews: 66,  badge: "promo",      popular: true,  icon: "fa-solid fa-ring",              description: "Bracelet manchette doré orné de touches violettes raffinées." },
-    { id: 14, name: "Trousse Maquillage Premium",  category: "beaute",      categoryLabel: "Beauté",      price: 42000,  oldPrice: null,   rating: 4.5, reviews: 33,  badge: "new",        popular: false, icon: "fa-solid fa-paintbrush",        description: "Trousse complète : palette, pinceaux et accessoires essentiels." }
-  ];
+/* ══════════════════════════════════════════
+   2. ÉTAT DE L'APPLICATION
+══════════════════════════════════════════ */
+let cart = JSON.parse(localStorage.getItem('fyriah_cart') || '[]');
+let activeFilter = 'all';
 
-  /* Avis clients (démo) */
-  const reviews = [
-    { name: "Hary R.",      role: "Antananarivo", rating: 5, text: "Le sac en cuir est encore plus beau en vrai. Livraison rapide et emballage très soigné !" },
-    { name: "Mialy F.",     role: "Fianarantsoa",  rating: 5, text: "J'adore la robe Améthyste, la coupe est parfaite. Fy Riah est devenue ma boutique préférée." },
-    { name: "Tojo N.",      role: "Toamasina",     rating: 4, text: "Très bon rapport qualité-prix sur la montre. Le service client a répondu très vite à mes questions." },
-    { name: "Sitraka A.",   role: "Antsirabe",     rating: 5, text: "Le parfum Améthyste tient toute la journée. Je recommande à 100%, ça sent vraiment le premium." },
-    { name: "Voahangy L.",  role: "Mahajanga",     rating: 5, text: "Commande reçue en parfait état, le collier est magnifique. Je repasserai commande très vite." },
-    { name: "Andry M.",     role: "Antananarivo",  rating: 4, text: "Site facile à utiliser, panier clair, et le blazer est superbement coupé. Très satisfait." }
-  ];
+/* ══════════════════════════════════════════
+   3. UTILITAIRES
+══════════════════════════════════════════ */
 
-  /* =================================================================
-     2. UTILITAIRES
-     ================================================================= */
-  const $  = (sel, ctx) => (ctx || document).querySelector(sel);
-  const $$ = (sel, ctx) => Array.from((ctx || document).querySelectorAll(sel));
+/** Persiste le panier */
+function saveCart() {
+  localStorage.setItem('fyriah_cart', JSON.stringify(cart));
+}
 
-  function formatPrice(value) {
-    return value.toLocaleString('fr-FR').replace(/,/g, ' ') + ' Ar';
-  }
+/** Affiche un toast de notification */
+function showToast(message, type = 'info', duration = 3000) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.className = toast ${type} show;
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, duration);
+}
 
-  function gradientClass(id) {
-    return 'g' + (((id - 1) % 6) + 1);
-  }
+/** Génère les étoiles HTML */
+function renderStars(rating) {
+  const full  = Math.floor(rating);
+  const half  = rating % 1 >= 0.5 ? 1 : 0;
+  const empty = 5 - full - half;
+  return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(empty);
+}
 
-  function badgeLabel(badge) {
-    if (badge === 'promo') return 'Promo';
-    if (badge === 'new') return 'Nouveau';
-    if (badge === 'bestseller') return 'Bestseller';
-    return '';
-  }
+/** Formate un prix */
+function formatPrice(price) {
+  return price.toFixed(2).replace('.', ',') + ' €';
+}
 
-  function starsHTML(rating) {
-    const full = Math.round(rating);
-    let html = '';
-    for (let i = 1; i <= 5; i++) {
-      html += `<i class="fa-${i <= full ? 'solid' : 'regular'} fa-star"></i>`;
-    }
-    return html;
-  }
+/** Génère une image de produit (SVG basé sur dégradé) */
+function productThumbHTML(product, size = '100%') {
+  return `<div style="width:${size};height:${size};background:${product.color};border-radius:8px;display:flex;align-items:center;justify-content:center;">
+    <span style="font-size:2rem;opacity:.18;">✦</span>
+  </div>`;
+}
 
-  function initials(name) {
-    return name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase();
-  }
+/* ══════════════════════════════════════════
+   4. RENDU DES PRODUITS
+══════════════════════════════════════════ */
 
-  /* =================================================================
-     3. PANIER (avec persistance localStorage)
-     ================================================================= */
-  let cart = [];
-  try {
-    const saved = localStorage.getItem('fyriah_cart');
-    cart = saved ? JSON.parse(saved) : [];
-  } catch (e) {
-    cart = [];
-  }
+/** Crée la carte produit complète */
+function createProductCard(product) {
+  const div = document.createElement('div');
+  div.className = 'product-card';
+  div.setAttribute('role', 'listitem');
+  div.dataset.id = product.id;
+  div.dataset.category = product.category;
 
-  function saveCart() {
-    try { localStorage.setItem('fyriah_cart', JSON.stringify(cart)); } catch (e) { /* stockage indisponible */ }
-  }
+  const badgeHTML = product.badge
+    ? <span class="product-badge product-badge--${product.badge === 'Promo' ? 'promo' : product.badge === 'Best-seller' ? 'pop' : 'new'}">${product.badge}</span>
+    : '';
 
-  function findProduct(id) {
-    return products.find(p => p.id === id);
-  }
+  const oldPriceHTML = product.oldPrice
+    ? <span class="product-card__old-price">${formatPrice(product.oldPrice)}</span>
+    : '';
 
-  function addToCart(id, qty) {
-    qty = qty || 1;
-    const item = cart.find(c => c.id === id);
-    if (item) { item.qty += qty; } else { cart.push({ id: id, qty: qty }); }
-    saveCart();
-    renderCart();
-  }
+  div.innerHTML = `
+    <div class="product-card__img-wrap">
+      <div class="product-card__img" style="background:${product.color};display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:2.5rem;opacity:.18;">✦</span>
+      </div>
+      <div class="product-card__badges">${badgeHTML}</div>
+      <div class="product-card__actions-overlay">
+        <button class="product-card__quick-btn" data-action="wishlist" aria-label="Ajouter aux favoris">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+        <button class="product-card__quick-btn" data-action="preview" aria-label="Aperçu rapide">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <p class="product-card__cat">${product.category}</p>
+      <h3 class="product-card__name">${product.name}</h3>
+      <p class="product-card__desc">${product.desc}</p>
+      <div class="product-card__rating">
+        <span class="product-card__stars" aria-label="${product.rating} étoiles">${renderStars(product.rating)}</span>
+        <span class="product-card__rating-count">(${product.reviews})</span>
+      </div>
+      <div class="product-card__footer">
+        <div class="product-card__prices">
+          <span class="product-card__price">${formatPrice(product.price)}</span>
+          ${oldPriceHTML}
+        </div>
+        <button class="product-card__add" data-id="${product.id}" aria-label="Ajouter ${product.name} au panier">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Ajouter
+        </button>
+      </div>
+    </div>`;
 
-  function changeQty(id, delta) {
-    const item = cart.find(c => c.id === id);
-    if (!item) return;
-    item.qty += delta;
-    if (item.qty <= 0) {
-      cart = cart.filter(c => c.id !== id);
-    }
-    saveCart();
-    renderCart();
-  }
-
-  function removeFromCart(id) {
-    cart = cart.filter(c => c.id !== id);
-    saveCart();
-    renderCart();
-  }
-
-  function clearCart() {
-    cart = [];
-    saveCart();
-    renderCart();
-  }
-
-  function cartCount() {
-    return cart.reduce((sum, c) => sum + c.qty, 0);
-  }
-
-  function cartTotal() {
-    return cart.reduce((sum, c) => {
-      const p = findProduct(c.id);
-      return p ? sum + p.price * c.qty : sum;
-    }, 0);
-  }
-
-  function renderCart() {
-    const itemsEl = $('#cart-items');
-    const drawer = $('#cart-drawer');
-    const countEl = $('#cart-count');
-
-    const count = cartCount();
-    countEl.textContent = count;
-    countEl.classList.toggle('hidden', count === 0);
-    drawer.classList.toggle('is-empty', cart.length === 0);
-
-    itemsEl.innerHTML = cart.map(c => {
-      const p = findProduct(c.id);
-      if (!p) return '';
-      return `
-        <div class="cart-item" data-id="${p.id}">
-          <div class="cart-item-visual ${gradientClass(p.id)}"><i class="${p.icon}"></i></div>
-          <div class="cart-item-info">
-            <h5>${p.name}</h5>
-            <span class="unit-price">${formatPrice(p.price)} / unité</span>
-            <div class="qty-control">
-              <button class="qty-minus" aria-label="Diminuer la quantité"><i class="fa-solid fa-minus"></i></button>
-              <span>${c.qty}</span>
-              <button class="qty-plus" aria-label="Augmenter la quantité"><i class="fa-solid fa-plus"></i></button>
-            </div>
-          </div>
-          <div class="cart-item-right">
-            <span class="cart-item-subtotal">${formatPrice(p.price * c.qty)}</span>
-            <button class="remove-btn" aria-label="Retirer du panier"><i class="fa-solid fa-trash"></i></button>
-          </div>
-        </div>`;
-    }).join('');
-
-    $('#cart-total').textContent = formatPrice(cartTotal());
-  }
-
-  /* Délégation des clics dans le panier (quantité / suppression) */
-  $('#cart-items').addEventListener('click', function (e) {
-    const itemEl = e.target.closest('.cart-item');
-    if (!itemEl) return;
-    const id = parseInt(itemEl.dataset.id, 10);
-    if (e.target.closest('.qty-plus')) changeQty(id, 1);
-    else if (e.target.closest('.qty-minus')) changeQty(id, -1);
-    else if (e.target.closest('.remove-btn')) {
-      removeFromCart(id);
-      showToast('Produit retiré du panier', 'info');
-    }
+  /* Bouton ajouter au panier */
+  div.querySelector('.product-card__add').addEventListener('click', () => {
+    addToCart(product.id);
   });
 
-  /* =================================================================
-     4. RENDU DES PRODUITS (catalogue + populaires)
-     ================================================================= */
-  function productCardHTML(p) {
-    const badge = p.badge ? `<span class="badge badge-${p.badge}">${badgeLabel(p.badge)}</span>` : '';
-    const oldPrice = p.oldPrice ? `<span class="price-old">${formatPrice(p.oldPrice)}</span>` : '';
-    return `
-      <article class="product-card" data-id="${p.id}">
-        <div class="product-visual ${gradientClass(p.id)}">
-          ${badge}
-          <i class="${p.icon}"></i>
-        </div>
-        <div class="product-info">
-          <span class="product-category">${p.categoryLabel}</span>
-          <h3 class="product-name">${p.name}</h3>
-          <p class="product-desc">${p.description}</p>
-          <div class="product-rating">${starsHTML(p.rating)} <span>(${p.reviews})</span></div>
-          <div class="product-price-row">
-            <span class="price-current">${formatPrice(p.price)}</span>
-            ${oldPrice}
-          </div>
-          <button class="btn-add-cart" data-id="${p.id}"><i class="fa-solid fa-bag-shopping"></i> Ajouter au panier</button>
-        </div>
-      </article>`;
+  /* Quick actions */
+  div.querySelector('[data-action="wishlist"]').addEventListener('click', () => {
+    showToast(💜 ${product.name} ajouté aux favoris, 'info');
+  });
+  div.querySelector('[data-action="preview"]').addEventListener('click', () => {
+    showToast(👁 Aperçu de ${product.name}, 'info');
+  });
+
+  return div;
+}
+
+/** Rendu de la grille avec filtre */
+function renderProducts(filter = 'all') {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = '';
+
+  const filtered = filter === 'all'
+    ? PRODUCTS
+    : PRODUCTS.filter(p => p.category === filter);
+
+  filtered.forEach((product, i) => {
+    const card = createProductCard(product);
+    card.style.animationDelay = ${i * 0.06}s;
+    card.classList.add('fade-up');
+    grid.appendChild(card);
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--gray-400);padding:3rem;">Aucun produit dans cette catégorie.</p>';
+  }
+}
+
+/** Rendu des best-sellers */
+function renderPopular() {
+  const grid = document.getElementById('popularGrid');
+  const pops = PRODUCTS.filter(p => p.popular).sort((a, b) => a.rank - b.rank);
+
+  pops.forEach((product, i) => {
+    const div = document.createElement('div');
+    div.className = 'popular-card fade-up';
+    div.setAttribute('role', 'listitem');
+    div.style.animationDelay = ${i * 0.08}s;
+
+    div.innerHTML = `
+      <div class="popular-card__rank">${product.rank}</div>
+      <div class="popular-card__img" style="background:${product.color};display:flex;align-items:center;justify-content:center;border-radius:8px;">
+        <span style="font-size:1.5rem;opacity:.2;">✦</span>
+      </div>
+      <div class="popular-card__info">
+        <p class="popular-card__name">${product.name}</p>
+        <p class="popular-card__price">${formatPrice(product.price)}</p>
+        <button class="popular-card__add" data-id="${product.id}" aria-label="Ajouter ${product.name} au panier">
+          + Ajouter au panier
+        </button>
+      </div>`;
+
+    div.querySelector('.popular-card__add').addEventListener('click', () => {
+      addToCart(product.id);
+    });
+
+    grid.appendChild(div);
+  });
+}
+
+/* ══════════════════════════════════════════
+   5. PANIER
+══════════════════════════════════════════ */
+
+/** Ajoute un produit au panier */
+function addToCart(productId) {
+  const product = PRODUCTS.find(p => p.id === productId);
+  if (!product) return;
+
+  const existing = cart.find(item => item.id === productId);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ id: product.id, qty: 1 });
   }
 
-  function renderProducts(list) {
-    const grid = $('#product-grid');
-    const noResults = $('#no-results');
-    if (list.length === 0) {
-      grid.innerHTML = '';
-      noResults.classList.add('show');
-      return;
-    }
-    noResults.classList.remove('show');
-    grid.innerHTML = list.map(productCardHTML).join('');
+  saveCart();
+  updateCartUI();
+  showToast(🛍 ${product.name} ajouté au panier, 'success');
+
+  // Animation badge
+  const badge = document.getElementById('cartBadge');
+  badge.classList.remove('bounce');
+  void badge.offsetWidth; // reflow
+  badge.classList.add('bounce');
+}
+
+/** Met à jour la quantité */
+function updateQty(productId, delta) {
+  const item = cart.find(i => i.id === productId);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) {
+    cart = cart.filter(i => i.id !== productId);
+  }
+  saveCart();
+  updateCartUI();
+}
+
+/** Supprime un article */
+function removeFromCart(productId) {
+  const product = PRODUCTS.find(p => p.id === productId);
+  cart = cart.filter(i => i.id !== productId);
+  saveCart();
+  updateCartUI();
+  if (product) showToast🗑 ${product.name} retiré du panier`, 'error');
+}
+
+/** Calcule le total */
+function getCartTotal() {
+  return cart.reduce((sum, item) => {
+    const p = PRODUCTS.find(p => p.id === item.id);
+    return p ? sum + p.price * item.qty : sum;
+  }, 0);
+}
+
+/** Nombre d'articles total */
+function getCartCount() {
+  return cart.reduce((sum, item) => sum + item.qty, 0);
+}
+
+/** Met à jour tout l'UI panier */
+function updateCartUI() {
+  const count = getCartCount();
+  const badge = document.getElementById('cartBadge');
+  badge.textContent = count;
+  badge.setAttribute('aria-label', ${count} article${count !== 1 ? 's' : ''} dans le panier);
+
+  renderCartDrawer();
+}
+
+/** Rendu du panier latéral */
+function renderCartDrawer() {
+  const body   = document.getElementById('cartBody');
+  const footer = document.getElementById('cartFooter');
+
+  if (cart.length === 0) {
+    body.innerHTML = `
+      <div class="cart-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <p>Votre panier est vide.<br /><a href="#produits" id="cartToShop">Voir la collection →</a></p>
+      </div>`;
+    document.getElementById('cartToShop')?.addEventListener('click', closeCart);
+    footer.innerHTML = '';
+    return;
   }
 
-  function renderPopular() {
-    const track = $('#popular-track');
-    const popular = products.filter(p => p.popular);
-    track.innerHTML = popular.map(productCardHTML).join('');
-  }
-
-  /* Délégation : bouton "Ajouter au panier" sur toutes les grilles produits */
-  document.addEventListener('click', function (e) {
-    const btn = e.target.closest('.btn-add-cart');
-    if (!btn) return;
-    const id = parseInt(btn.dataset.id, 10);
-    const product = findProduct(id);
+  body.innerHTML = '';
+  cart.forEach(item => {
+    const product = PRODUCTS.find(p => p.id === item.id);
     if (!product) return;
 
-    addToCart(id, 1);
-    showToast(`${product.name} ajouté au panier`, 'success');
-
-    const cartBtn = $('#cart-toggle');
-    cartBtn.classList.remove('bump');
-    requestAnimationFrame(() => cartBtn.classList.add('bump'));
-
-    const originalHTML = btn.innerHTML;
-    btn.classList.add('added');
-    btn.innerHTML = '<i class="fa-solid fa-check"></i> Ajouté';
-    setTimeout(() => {
-      btn.classList.remove('added');
-      btn.innerHTML = originalHTML;
-    }, 1300);
-  });
-
-  /* =================================================================
-     5. RECHERCHE & FILTRES PAR CATÉGORIE
-     ================================================================= */
-  let activeCategory = 'tous';
-  let searchTerm = '';
-
-  function applyFilters() {
-    const term = searchTerm.trim().toLowerCase();
-    const filtered = products.filter(p => {
-      const matchCategory = activeCategory === 'tous' || p.category === activeCategory;
-      const matchSearch = !term ||
-        p.name.toLowerCase().includes(term) ||
-        p.description.toLowerCase().includes(term) ||
-        p.categoryLabel.toLowerCase().includes(term);
-      return matchCategory && matchSearch;
-    });
-    renderProducts(filtered);
-  }
-
-  $('#search-input').addEventListener('input', function (e) {
-    searchTerm = e.target.value;
-    applyFilters();
-  });
-
-  $$('.chip').forEach(chip => {
-    chip.addEventListener('click', function () {
-      $$('.chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      activeCategory = chip.dataset.category;
-      applyFilters();
-    });
-  });
-
-  /* Icône loupe de la navbar : va à la boutique et place le focus sur la recherche */
-  $('#search-toggle').addEventListener('click', function () {
-    document.getElementById('boutique').scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => $('#search-input').focus(), 450);
-  });
-
-  /* =================================================================
-     6. AVIS CLIENTS
-     ================================================================= */
-  function renderReviews() {
-    const track = $('#reviews-track');
-    track.innerHTML = reviews.map(r => `
-      <div class="review-card">
-        <div class="review-stars">${starsHTML(r.rating)}</div>
-        <p class="review-text">${r.text}</p>
-        <div class="review-author">
-          <div class="avatar-circle">${initials(r.name)}</div>
-          <div>
-            <strong>${r.name}</strong>
-            <span>${r.role}</span>
-          </div>
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `
+      <div class="cart-item__img" style="background:${product.color};border-radius:8px;width:72px;height:72px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span style="font-size:1.2rem;opacity:.2;">✦</span>
+      </div>
+      <div class="cart-item__info">
+        <p class="cart-item__name">${product.name}</p>
+        <p class="cart-item__price">${formatPrice(product.price)}</p>
+        <div class="cart-item__qty">
+          <button aria-label="Diminuer la quantité" data-action="dec" data-id="${product.id}">−</button>
+          <span aria-live="polite">${item.qty}</span>
+          <button aria-label="Augmenter la quantité" data-action="inc" data-id="${product.id}">+</button>
         </div>
-      </div>`).join('');
-  }
+      </div>
+      <button class="cart-item__remove" aria-label="Retirer ${product.name}" data-remove="${product.id}">✕</button>`;
 
-  $('#reviews-prev').addEventListener('click', () => $('#reviews-track').scrollBy({ left: -320, behavior: 'smooth' }));
-  $('#reviews-next').addEventListener('click', () => $('#reviews-track').scrollBy({ left: 320, behavior: 'smooth' }));
+    div.querySelector('[data-action="dec"]').addEventListener('click', () => updateQty(product.id, -1));
+    div.querySelector('[data-action="inc"]').addEventListener('click', () => updateQty(product.id, 1));
+    div.querySelector('[data-remove]').addEventListener('click', () => removeFromCart(product.id));
 
-  /* =================================================================
-     7. PANIER LATÉRAL — OUVERTURE / FERMETURE
-     ================================================================= */
-  const overlay = $('#overlay');
-  const cartDrawer = $('#cart-drawer');
-  const navMenu = $('#nav-menu');
-  const hamburger = $('#hamburger-btn');
-  const orderModal = $('#order-modal');
-
-  function closeAllPanels() {
-    cartDrawer.classList.remove('open');
-    navMenu.classList.remove('open');
-    hamburger.classList.remove('open');
-    hamburger.setAttribute('aria-expanded', 'false');
-    orderModal.classList.remove('open');
-    overlay.classList.remove('active');
-  }
-
-  function openCart() {
-    closeAllPanels();
-    renderCart();
-    cartDrawer.classList.add('open');
-    overlay.classList.add('active');
-  }
-
-  $('#cart-toggle').addEventListener('click', openCart);
-  $('#cart-close').addEventListener('click', closeAllPanels);
-  $('#continue-shopping').addEventListener('click', closeAllPanels);
-
-  $('#checkout-btn').addEventListener('click', function () {
-    if (cart.length === 0) return;
-    const total = formatPrice(cartTotal());
-    const count = cartCount();
-    $('#order-modal-text').textContent =
-      `Votre commande de ${count} article${count > 1 ? 's' : ''} (${total}) a été enregistrée. Notre équipe vous contactera très bientôt.`;
-    clearCart();
-    closeAllPanels();
-    orderModal.classList.add('open');
-    overlay.classList.add('active');
+    body.appendChild(div);
   });
 
-  $('#modal-close').addEventListener('click', closeAllPanels);
+  const total    = getCartTotal();
+  const shipping = total >= 80 ? 0 : 5.9;
+  const grandTotal = total + shipping;
 
-  /* =================================================================
-     8. MENU MOBILE (hamburger)
-     ================================================================= */
-  hamburger.addEventListener('click', function () {
-    const isOpen = navMenu.classList.contains('open');
-    closeAllPanels();
-    if (!isOpen) {
-      navMenu.classList.add('open');
-      hamburger.classList.add('open');
-      hamburger.setAttribute('aria-expanded', 'true');
-      overlay.classList.add('active');
-    }
-  });
+  footer.innerHTML = `
+    <div class="cart-subtotal"><span>Sous-total</span><span>${formatPrice(total)}</span></div>
+    <div class="cart-subtotal"><span>Livraison</span><span>${shipping === 0 ? '🎉 Gratuite' : formatPrice(shipping)}</span></div>
+    <div class="cart-total"><span>Total</span><span>${formatPrice(grandTotal)}</span></div>
+    ${shipping > 0 ? <p class="cart-shipping">Plus que ${formatPrice(80 - total)} pour la livraison gratuite.</p> : ''}
+    <button class="btn btn--primary btn--full" id="checkoutBtn">
+      Passer commande · ${formatPrice(grandTotal)}
+    </button>`;
 
-  $$('.nav-link').forEach(link => {
-    link.addEventListener('click', closeAllPanels);
-  });
-
-  overlay.addEventListener('click', closeAllPanels);
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeAllPanels();
-  });
-
-  /* =================================================================
-     9. NAVIGATION : fond au scroll + lien actif
-     ================================================================= */
-  const navbar = $('#navbar');
-
-  window.addEventListener('scroll', function () {
-    navbar.classList.toggle('scrolled', window.scrollY > 30);
-    $('#back-to-top').classList.toggle('show', window.scrollY > 420);
-    updateActiveLink();
-  });
-
-  function updateActiveLink() {
-    const scrollPos = window.scrollY + 140;
-    let currentId = '';
-    $$('section[id]').forEach(sec => {
-      if (sec.offsetTop <= scrollPos) currentId = sec.id;
-    });
-    $$('.nav-link').forEach(link => {
-      link.classList.toggle('active', link.getAttribute('href') === '#' + currentId);
-    });
-  }
-
-  $('#back-to-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-  /* =================================================================
-     10. BARRE D'ANNONCE — messages tournants
-     ================================================================= */
-  const announcements = [
-    "✨ Livraison offerte à partir de 100 000 Ar",
-    "🎉 Jusqu'à -25% sur une sélection de produits",
-    "💜 Nouvelle collection disponible dès maintenant"
-  ];
-  let annIndex = 0;
-  const annText = $('#announcement-text');
-  setInterval(() => {
-    annIndex = (annIndex + 1) % announcements.length;
-    annText.style.opacity = 0;
+  document.getElementById('checkoutBtn').addEventListener('click', () => {
+    showToast('🎉 Merci pour votre commande ! Vous allez être redirigé.', 'success', 4000);
     setTimeout(() => {
-      annText.textContent = announcements[annIndex];
-      annText.style.opacity = 1;
-    }, 250);
-  }, 4500);
-
-  $('#announcement-close').addEventListener('click', () => {
-    $('#announcement-bar').classList.add('hidden');
+      cart = [];
+      saveCart();
+      updateCartUI();
+      closeCart();
+    }, 2500);
   });
+}
 
-  /* =================================================================
-     11. TOASTS
-     ================================================================= */
-  function showToast(message, type) {
-    type = type || 'info';
-    const icons = { success: 'fa-circle-check', error: 'fa-circle-exclamation', info: 'fa-circle-info' };
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.innerHTML = `<i class="fa-solid ${icons[type]}"></i><span>${message}</span>`;
-    $('#toast-container').appendChild(toast);
-    setTimeout(() => {
-      toast.classList.add('hide');
-      setTimeout(() => toast.remove(), 350);
-    }, 3200);
+/* ══════════════════════════════════════════
+   6. NAVIGATION & MENUS
+══════════════════════════════════════════ */
+
+function openCart() {
+  document.getElementById('cartDrawer').classList.add('open');
+  document.getElementById('cartDrawer').setAttribute('aria-hidden', 'false');
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('cartToggle').setAttribute('aria-expanded', 'true');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCart() {
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.getElementById('cartDrawer').setAttribute('aria-hidden', 'true');
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('cartToggle').setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+
+function openSearch() {
+  const bar = document.getElementById('searchBar');
+  bar.classList.add('open');
+  bar.setAttribute('aria-hidden', 'false');
+  document.getElementById('searchToggle').setAttribute('aria-expanded', 'true');
+  setTimeout(() => document.getElementById('searchInput').focus(), 100);
+}
+
+function closeSearch() {
+  const bar = document.getElementById('searchBar');
+  bar.classList.remove('open');
+  bar.setAttribute('aria-hidden', 'true');
+  document.getElementById('searchToggle').setAttribute('aria-expanded', 'false');
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').innerHTML = '';
+}
+
+function toggleMobileMenu() {
+  const links = document.getElementById('navLinks');
+  const burger = document.getElementById('hamburger');
+  const isOpen = links.classList.toggle('open');
+  burger.classList.toggle('open', isOpen);
+  burger.setAttribute('aria-expanded', isOpen);
+}
+
+/* ══════════════════════════════════════════
+   7. RECHERCHE EN TEMPS RÉEL
+══════════════════════════════════════════ */
+
+function handleSearch(query) {
+  const results = document.getElementById('searchResults');
+  const q = query.trim().toLowerCase();
+
+  if (q.length < 2) { results.innerHTML = ''; return; }
+
+  const matches = PRODUCTS.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    p.desc.toLowerCase().includes(q) ||
+    p.category.toLowerCase().includes(q)
+  ).slice(0, 6);
+
+  if (matches.length === 0) {
+    results.innerHTML = '<p class="search-no-result">Aucun produit trouvé pour cette recherche.</p>';
+    return;
   }
 
-  /* =================================================================
-     12. FORMULAIRE DE CONTACT — validation JavaScript
-     ================================================================= */
-  const contactForm = $('#contact-form');
-  const fields = {
-    name: { input: $('#cf-name'), error: $('#err-name') },
-    email: { input: $('#cf-email'), error: $('#err-email') },
-    subject: { input: $('#cf-subject'), error: $('#err-subject') },
-    message: { input: $('#cf-message'), error: $('#err-message') }
-  };
+  results.innerHTML = matches.map(p => `
+    <div class="search-result-item" role="option" tabindex="0" data-id="${p.id}">
+      <div class="search-result-thumb" style="background:${p.color};display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:1rem;opacity:.2;">✦</span>
+      </div>
+      <div>
+        <strong>${p.name}</strong>
+        <span>${formatPrice(p.price)}</span>
+      </div>
+    </div>`).join('');
 
-  function setError(field, message) {
-    field.input.closest('.form-group').classList.toggle('error', !!message);
-    field.error.textContent = message || '';
-  }
-
-  function validateField(key) {
-    const value = fields[key].input.value.trim();
-    if (key === 'name') {
-      if (value.length < 2) { setError(fields.name, 'Veuillez indiquer votre nom (2 caractères minimum).'); return false; }
-    }
-    if (key === 'email') {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!re.test(value)) { setError(fields.email, 'Veuillez saisir une adresse e-mail valide.'); return false; }
-    }
-    if (key === 'subject') {
-      if (!value) { setError(fields.subject, 'Veuillez choisir un sujet.'); return false; }
-    }
-    if (key === 'message') {
-      if (value.length < 10) { setError(fields.message, 'Votre message doit contenir au moins 10 caractères.'); return false; }
-    }
-    setError(fields[key], '');
-    return true;
-  }
-
-  Object.keys(fields).forEach(key => {
-    fields[key].input.addEventListener('blur', () => validateField(key));
-    fields[key].input.addEventListener('input', () => {
-      if (fields[key].input.closest('.form-group').classList.contains('error')) validateField(key);
-    });
-  });
-
-  contactForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const results = Object.keys(fields).map(validateField);
-    const allValid = results.every(Boolean);
-    if (!allValid) {
-      showToast('Merci de corriger les champs en rouge.', 'error');
-      return;
-    }
-
-    const submitBtn = $('#cf-submit');
-    submitBtn.classList.add('is-loading');
-
-    setTimeout(() => {
-      submitBtn.classList.remove('is-loading');
-      $('#form-success').classList.add('show');
-      showToast('Message envoyé avec succès !', 'success');
-      contactForm.reset();
-      Object.keys(fields).forEach(key => setError(fields[key], ''));
-      setTimeout(() => $('#form-success').classList.remove('show'), 4500);
-    }, 1100);
-  });
-
-  /* Newsletter (pied de page) */
-  $('#newsletter-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const input = $('#newsletter-email');
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!re.test(input.value.trim())) {
-      showToast('Veuillez saisir une adresse e-mail valide.', 'error');
-      return;
-    }
-    showToast('Merci pour votre inscription à la newsletter !', 'success');
-    input.value = '';
-  });
-
-  /* =================================================================
-     13. ANIMATIONS AU DÉFILEMENT (IntersectionObserver)
-     ================================================================= */
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        revealObserver.unobserve(entry.target);
+  results.querySelectorAll('.search-result-item').forEach(item => {
+    const handler = () => {
+      const id = Number(item.dataset.id);
+      const product = PRODUCTS.find(p => p.id === id);
+      if (product) {
+        addToCart(id);
+        closeSearch();
       }
-    });
-  }, { threshold: 0.15 });
+    };
+    item.addEventListener('click', handler);
+    item.addEventListener('keydown', e => { if (e.key === 'Enter') handler(); });
+  });
+}
 
-  $$('.reveal').forEach(el => revealObserver.observe(el));
+/* ══════════════════════════════════════════
+   8. FILTRES PRODUITS
+══════════════════════════════════════════ */
 
-  /* Compteur animé des statistiques (section À propos) */
-  let statsAnimated = false;
-  const statsSection = $('.about-stats');
-  function animateStats() {
-    if (statsAnimated) return;
-    statsAnimated = true;
-    $$('.stat-number').forEach(el => {
-      const target = parseInt(el.dataset.target, 10);
-      const duration = 1200;
-      const start = performance.now();
-      function step(now) {
-        const progress = Math.min((now - start) / duration, 1);
-        el.textContent = Math.floor(progress * target);
-        if (progress < 1) requestAnimationFrame(step);
-        else el.textContent = target;
-      }
-      requestAnimationFrame(step);
-    });
-  }
-  if (statsSection) {
-    new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) { animateStats(); obs.disconnect(); }
-      });
-    }, { threshold: 0.4 }).observe(statsSection);
-  }
-
-  /* =================================================================
-     14. INITIALISATION
-     ================================================================= */
-  renderProducts(products);
-  renderPopular();
-  renderReviews();
-  renderCart();
-  updateActiveLink();
-
-})();
+function initFilters() {
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
