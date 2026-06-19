@@ -1,427 +1,568 @@
-/**
- * FY RIAH — script.js
- * Tous les boutons 100% fonctionnels
- */
+/* ===================================================================
+   FY RIAH — SCRIPT.JS
+   Logique complète du site : catalogue, panier, recherche, filtres,
+   formulaires, menu mobile, animations au défilement.
+   =================================================================== */
 
-/* =========================================
-   DONNÉES PRODUITS
-   ========================================= */
-const PRODUITS = {
-  1: { nom: "Robe Élégante Violette",   prix: 89000,  emoji: "👗", cat: "Mode",   stars: "★★★★☆", avis: 42,  desc: "Robe longue en soie violette, coupe élégante pour toutes occasions. Disponible en S, M, L, XL.", ancien: 110000 },
-  2: { nom: "Sérum Éclat Naturel",       prix: 45000,  emoji: "✨", cat: "Beauté", stars: "★★★★★", avis: 89,  desc: "Formule avancée à base de vitamine C et d'acide hyaluronique pour une peau lumineuse en 7 jours.", ancien: 56000 },
-  3: { nom: "Vase Céramique Artisan",    prix: 62000,  emoji: "🏺", cat: "Maison", stars: "★★★★☆", avis: 31,  desc: "Vase en céramique fait main par des artisans locaux. Hauteur 35cm, idéal pour les fleurs sèches." },
-  4: { nom: "Casque Audio Premium",      prix: 185000, emoji: "🎧", cat: "Tech",   stars: "★★★★★", avis: 156, desc: "Son haute fidélité, réduction de bruit active, 30h d'autonomie. Compatible Bluetooth 5.2.", ancien: 220000 },
-  5: { nom: "Sac à Main Luxe",           prix: 135000, emoji: "👜", cat: "Mode",   stars: "★★★★☆", avis: 67,  desc: "Sac en cuir véritable, doublure en velours, fermeture magnétique. Dimensions : 30×20×12 cm." },
-  6: { nom: "Montre Connectée Violet",   prix: 250000, emoji: "⌚", cat: "Tech",   stars: "★★★★★", avis: 203, desc: "Montre smartwatch, suivi santé avancé, GPS intégré, étanche IP68. Compatible iOS & Android.", ancien: 300000 },
-  7: { nom: "Rouge à Lèvres Premium",    prix: 28000,  emoji: "💄", cat: "Beauté", stars: "★★★★☆", avis: 58,  desc: "Formule longue tenue 12h, couleurs intenses. Collection de 18 teintes exclusives." },
-  8: { nom: "Bougie Parfumée Luxe",      prix: 38000,  emoji: "🕯️", cat: "Maison", stars: "★★★★★", avis: 94,  desc: "Cire de soja naturelle, 60h de combustion, parfum floral délicat. Fabriquée à Madagascar.", ancien: 45000 },
-};
+(function () {
+  'use strict';
 
-/* =========================================
-   PANIER
-   ========================================= */
-let panier = {};
-try { panier = JSON.parse(localStorage.getItem("fyriah_cart") || "{}"); } catch(e) { panier = {}; }
-let favoris = new Set(JSON.parse(localStorage.getItem("fyriah_wish") || "[]"));
+  /* =================================================================
+     1. DONNÉES PRODUITS (démo — 14 articles)
+     ================================================================= */
+  const products = [
+    { id: 1,  name: "Robe Soirée Améthyste",      category: "mode",        categoryLabel: "Mode",        price: 89000,  oldPrice: 120000, rating: 4.8, reviews: 124, badge: "promo",      popular: true,  icon: "fa-solid fa-person-dress",      description: "Robe longue fluide en satin violet, idéale pour vos soirées élégantes." },
+    { id: 2,  name: "Sac à Main Cuir Violet",      category: "accessoires", categoryLabel: "Accessoires", price: 150000, oldPrice: null,   rating: 4.9, reviews: 98,  badge: "new",        popular: true,  icon: "fa-solid fa-bag-shopping",      description: "Sac en cuir véritable, finitions soignées et compartiment intérieur zippé." },
+    { id: 3,  name: "Montre Élégance Noire",       category: "accessoires", categoryLabel: "Accessoires", price: 185000, oldPrice: 230000, rating: 4.7, reviews: 76,  badge: "promo",      popular: true,  icon: "fa-solid fa-clock",             description: "Montre au boîtier noir mat et bracelet acier, pour un style intemporel." },
+    { id: 4,  name: "Parfum Améthyste Intense",    category: "beaute",      categoryLabel: "Beauté",      price: 65000,  oldPrice: null,   rating: 4.9, reviews: 210, badge: "bestseller", popular: true,  icon: "fa-solid fa-spray-can-sparkles",description: "Eau de parfum boisée et florale, sillage longue durée." },
+    { id: 5,  name: "Chemise Lin Blanche Premium", category: "mode",        categoryLabel: "Mode",        price: 55000,  oldPrice: null,   rating: 4.5, reviews: 61,  badge: null,         popular: false, icon: "fa-solid fa-shirt",             description: "Chemise en lin respirant, coupe ajustée pour toutes les occasions." },
+    { id: 6,  name: "Collier Pendentif Violine",   category: "accessoires", categoryLabel: "Accessoires", price: 45000,  oldPrice: 58000,  rating: 4.8, reviews: 143, badge: "promo",      popular: true,  icon: "fa-solid fa-gem",               description: "Collier fin avec pendentif serti d'une pierre violette facettée." },
+    { id: 7,  name: "Crème Hydratante Éclat",      category: "beaute",      categoryLabel: "Beauté",      price: 38000,  oldPrice: null,   rating: 4.6, reviews: 87,  badge: null,         popular: false, icon: "fa-solid fa-droplet",           description: "Soin visage hydratant à l'acide hyaluronique, pour une peau repulpée." },
+    { id: 8,  name: "Blazer Tailleur Premium",     category: "mode",        categoryLabel: "Mode",        price: 175000, oldPrice: null,   rating: 4.7, reviews: 54,  badge: "new",        popular: false, icon: "fa-solid fa-vest",              description: "Blazer structuré à la coupe impeccable, parfait du bureau aux soirées." },
+    { id: 9,  name: "Lunettes de Soleil Glam",     category: "accessoires", categoryLabel: "Accessoires", price: 60000,  oldPrice: null,   rating: 4.4, reviews: 39,  badge: null,         popular: false, icon: "fa-solid fa-glasses",           description: "Monture tendance avec verres polarisés anti-UV." },
+    { id: 10, name: "Coussin Velours Royal",       category: "maison",      categoryLabel: "Maison",      price: 32000,  oldPrice: 42000,  rating: 4.5, reviews: 28,  badge: "promo",      popular: false, icon: "fa-solid fa-couch",             description: "Coussin en velours doux, parfait pour sublimer votre salon." },
+    { id: 11, name: "Bougie Parfumée Lavande",     category: "maison",      categoryLabel: "Maison",      price: 28000,  oldPrice: null,   rating: 4.6, reviews: 45,  badge: null,         popular: false, icon: "fa-solid fa-fire",              description: "Bougie artisanale à la cire végétale, notes apaisantes de lavande." },
+    { id: 12, name: "Écharpe Soie Imprimée",       category: "mode",        categoryLabel: "Mode",        price: 47000,  oldPrice: null,   rating: 4.3, reviews: 22,  badge: null,         popular: false, icon: "fa-solid fa-ribbon",            description: "Écharpe en soie douce à motifs exclusifs, légère en toute saison." },
+    { id: 13, name: "Bracelet Manchette Violet",   category: "accessoires", categoryLabel: "Accessoires", price: 52000,  oldPrice: 65000,  rating: 4.7, reviews: 66,  badge: "promo",      popular: true,  icon: "fa-solid fa-ring",              description: "Bracelet manchette doré orné de touches violettes raffinées." },
+    { id: 14, name: "Trousse Maquillage Premium",  category: "beaute",      categoryLabel: "Beauté",      price: 42000,  oldPrice: null,   rating: 4.5, reviews: 33,  badge: "new",        popular: false, icon: "fa-solid fa-paintbrush",        description: "Trousse complète : palette, pinceaux et accessoires essentiels." }
+  ];
 
-function savePanier() { localStorage.setItem("fyriah_cart", JSON.stringify(panier)); }
-function saveFavoris() { localStorage.setItem("fyriah_wish", JSON.stringify([...favoris])); }
+  /* Avis clients (démo) */
+  const reviews = [
+    { name: "Hary R.",      role: "Antananarivo", rating: 5, text: "Le sac en cuir est encore plus beau en vrai. Livraison rapide et emballage très soigné !" },
+    { name: "Mialy F.",     role: "Fianarantsoa",  rating: 5, text: "J'adore la robe Améthyste, la coupe est parfaite. Fy Riah est devenue ma boutique préférée." },
+    { name: "Tojo N.",      role: "Toamasina",     rating: 4, text: "Très bon rapport qualité-prix sur la montre. Le service client a répondu très vite à mes questions." },
+    { name: "Sitraka A.",   role: "Antsirabe",     rating: 5, text: "Le parfum Améthyste tient toute la journée. Je recommande à 100%, ça sent vraiment le premium." },
+    { name: "Voahangy L.",  role: "Mahajanga",     rating: 5, text: "Commande reçue en parfait état, le collier est magnifique. Je repasserai commande très vite." },
+    { name: "Andry M.",     role: "Antananarivo",  rating: 4, text: "Site facile à utiliser, panier clair, et le blazer est superbement coupé. Très satisfait." }
+  ];
 
-function totalItems() { return Object.values(panier).reduce((s,i) => s + i.qte, 0); }
-function totalPrix()  { return Object.values(panier).reduce((s,i) => s + i.qte * i.prix, 0); }
+  /* =================================================================
+     2. UTILITAIRES
+     ================================================================= */
+  const $  = (sel, ctx) => (ctx || document).querySelector(sel);
+  const $$ = (sel, ctx) => Array.from((ctx || document).querySelectorAll(sel));
 
-function ajouterPanier(id) {
-  id = String(id);
-  const p = PRODUITS[id];
-  if (!p) return;
-  if (panier[id]) { panier[id].qte++; } else { panier[id] = { nom: p.nom, prix: p.prix, emoji: p.emoji, qte: 1 }; }
-  savePanier();
-  majCartBadge();
-  renderPanier();
-  toast("✓ " + p.nom + " ajouté au panier !");
-}
-
-function changerQte(id, delta) {
-  id = String(id);
-  if (!panier[id]) return;
-  panier[id].qte += delta;
-  if (panier[id].qte <= 0) delete panier[id];
-  savePanier();
-  majCartBadge();
-  renderPanier();
-}
-
-function majCartBadge() {
-  document.getElementById("cartCount").textContent = totalItems();
-}
-
-function renderPanier() {
-  const body = document.getElementById("cartBody");
-  const footer = document.getElementById("cartFooter");
-  const totalEl = document.getElementById("cartTotal");
-  const entries = Object.entries(panier);
-
-  if (entries.length === 0) {
-    body.innerHTML = `<div class="cart-vide"><div style="font-size:3rem;margin-bottom:12px">🛒</div><p>Votre panier est vide</p><button class="btn-primary" style="margin-top:20px" onclick="fermerPanier();document.getElementById('produits').scrollIntoView({behavior:'smooth'})">Voir les produits</button></div>`;
-    footer.classList.remove("show");
-    return;
+  function formatPrice(value) {
+    return value.toLocaleString('fr-FR').replace(/,/g, ' ') + ' Ar';
   }
 
-  body.innerHTML = entries.map(([id, item]) => `
-    <div class="cart-item">
-      <span class="ci-emoji">${item.emoji}</span>
-      <div class="ci-info">
-        <h4>${item.nom}</h4>
-        <p>${fmt(item.prix * item.qte)}</p>
-      </div>
-      <div class="ci-qty">
-        <button onclick="changerQte('${id}',-1)">−</button>
-        <span>${item.qte}</span>
-        <button onclick="changerQte('${id}',+1)">+</button>
-      </div>
-    </div>
-  `).join("");
-
-  // Barre livraison gratuite
-  const SEUIL = 150000;
-  const total = totalPrix();
-  const reste = SEUIL - total;
-  let livraisonHTML = "";
-  if (reste > 0) {
-    const pct = Math.min(100, (total / SEUIL) * 100);
-    livraisonHTML = `<div class="livraison-bar">🚚 Plus que <strong>${fmt(reste)}</strong> pour la livraison gratuite !<div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></div>`;
-  } else {
-    livraisonHTML = `<div class="livraison-bar" style="background:#d1fae5;color:#065f46">🎉 Livraison gratuite offerte !</div>`;
+  function gradientClass(id) {
+    return 'g' + (((id - 1) % 6) + 1);
   }
 
-  footer.innerHTML = livraisonHTML + `
-    <div class="total-row"><span>Sous-total</span><strong>${fmt(total)}</strong></div>
-    <button class="btn-primary btn-checkout" id="checkoutBtn">Commander maintenant →</button>
-    <p class="secure-msg">🔒 Paiement 100% sécurisé</p>
-  `;
-  footer.classList.add("show");
-
-  // Rebind checkout
-  document.getElementById("checkoutBtn").onclick = passerCommande;
-}
-
-function passerCommande() {
-  panier = {};
-  savePanier();
-  majCartBadge();
-  renderPanier();
-  fermerPanier();
-  toast("🎉 Commande passée avec succès ! Merci de votre confiance !");
-}
-
-/* =========================================
-   OUVERTURE / FERMETURE PANIER
-   ========================================= */
-function ouvrirPanier() {
-  renderPanier();
-  document.getElementById("cartDrawer").classList.add("open");
-  document.getElementById("drawerOverlay").classList.add("show");
-  document.body.style.overflow = "hidden";
-}
-function fermerPanier() {
-  document.getElementById("cartDrawer").classList.remove("open");
-  document.getElementById("drawerOverlay").classList.remove("show");
-  document.body.style.overflow = "";
-}
-
-document.getElementById("cartBtn").onclick = ouvrirPanier;
-document.getElementById("cartClose").onclick = fermerPanier;
-document.getElementById("drawerOverlay").onclick = fermerPanier;
-
-/* =========================================
-   MODAL PRODUIT
-   ========================================= */
-function ouvrirModal(id) {
-  id = String(id);
-  const p = PRODUITS[id];
-  if (!p) return;
-  const ancienHtml = p.ancien ? `<span class="modal-old">${fmt(p.ancien)}</span>` : "";
-  document.getElementById("modalContent").innerHTML = `
-    <div class="modal-emoji">${p.emoji}</div>
-    <p class="modal-cat">${p.cat}</p>
-    <h2 class="modal-title">${p.nom}</h2>
-    <div class="modal-stars">${p.stars} <small style="color:#6b6b9c;font-size:.82rem">(${p.avis} avis)</small></div>
-    <p class="modal-desc">${p.desc}</p>
-    <div class="modal-prix">${fmt(p.prix)} ${ancienHtml}</div>
-    <button class="btn-primary modal-btn" onclick="ajouterPanier(${id});fermerModal()">
-      Ajouter au panier
-    </button>
-  `;
-  document.getElementById("modalOverlay").classList.add("open");
-  document.body.style.overflow = "hidden";
-}
-function fermerModal() {
-  document.getElementById("modalOverlay").classList.remove("open");
-  document.body.style.overflow = "";
-}
-document.getElementById("modalClose").onclick = fermerModal;
-document.getElementById("modalOverlay").onclick = function(e) { if(e.target === this) fermerModal(); };
-
-/* =========================================
-   FAVORIS (wishlist)
-   ========================================= */
-function toggleFavori(id, btn) {
-  id = String(id);
-  if (favoris.has(id)) {
-    favoris.delete(id);
-    btn.textContent = "♡";
-    btn.classList.remove("wished");
-    toast("Retiré des favoris");
-  } else {
-    favoris.add(id);
-    btn.textContent = "♥";
-    btn.classList.add("wished");
-    btn.style.color = "#ef4444";
-    toast("❤️ Ajouté aux favoris !");
+  function badgeLabel(badge) {
+    if (badge === 'promo') return 'Promo';
+    if (badge === 'new') return 'Nouveau';
+    if (badge === 'bestseller') return 'Bestseller';
+    return '';
   }
-  saveFavoris();
-}
 
-/* =========================================
-   FILTRES PRODUITS
-   ========================================= */
-function filtrerProduits(filtre) {
-  document.querySelectorAll(".produit-card").forEach(card => {
-    const cat = card.dataset.categorie;
-    const visible = filtre === "tous" || cat === filtre;
-    card.classList.toggle("hidden", !visible);
-    if (visible) {
-      card.style.animation = "none";
-      requestAnimationFrame(() => { card.style.animation = ""; });
+  function starsHTML(rating) {
+    const full = Math.round(rating);
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+      html += `<i class="fa-${i <= full ? 'solid' : 'regular'} fa-star"></i>`;
+    }
+    return html;
+  }
+
+  function initials(name) {
+    return name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase();
+  }
+
+  /* =================================================================
+     3. PANIER (avec persistance localStorage)
+     ================================================================= */
+  let cart = [];
+  try {
+    const saved = localStorage.getItem('fyriah_cart');
+    cart = saved ? JSON.parse(saved) : [];
+  } catch (e) {
+    cart = [];
+  }
+
+  function saveCart() {
+    try { localStorage.setItem('fyriah_cart', JSON.stringify(cart)); } catch (e) { /* stockage indisponible */ }
+  }
+
+  function findProduct(id) {
+    return products.find(p => p.id === id);
+  }
+
+  function addToCart(id, qty) {
+    qty = qty || 1;
+    const item = cart.find(c => c.id === id);
+    if (item) { item.qty += qty; } else { cart.push({ id: id, qty: qty }); }
+    saveCart();
+    renderCart();
+  }
+
+  function changeQty(id, delta) {
+    const item = cart.find(c => c.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) {
+      cart = cart.filter(c => c.id !== id);
+    }
+    saveCart();
+    renderCart();
+  }
+
+  function removeFromCart(id) {
+    cart = cart.filter(c => c.id !== id);
+    saveCart();
+    renderCart();
+  }
+
+  function clearCart() {
+    cart = [];
+    saveCart();
+    renderCart();
+  }
+
+  function cartCount() {
+    return cart.reduce((sum, c) => sum + c.qty, 0);
+  }
+
+  function cartTotal() {
+    return cart.reduce((sum, c) => {
+      const p = findProduct(c.id);
+      return p ? sum + p.price * c.qty : sum;
+    }, 0);
+  }
+
+  function renderCart() {
+    const itemsEl = $('#cart-items');
+    const drawer = $('#cart-drawer');
+    const countEl = $('#cart-count');
+
+    const count = cartCount();
+    countEl.textContent = count;
+    countEl.classList.toggle('hidden', count === 0);
+    drawer.classList.toggle('is-empty', cart.length === 0);
+
+    itemsEl.innerHTML = cart.map(c => {
+      const p = findProduct(c.id);
+      if (!p) return '';
+      return `
+        <div class="cart-item" data-id="${p.id}">
+          <div class="cart-item-visual ${gradientClass(p.id)}"><i class="${p.icon}"></i></div>
+          <div class="cart-item-info">
+            <h5>${p.name}</h5>
+            <span class="unit-price">${formatPrice(p.price)} / unité</span>
+            <div class="qty-control">
+              <button class="qty-minus" aria-label="Diminuer la quantité"><i class="fa-solid fa-minus"></i></button>
+              <span>${c.qty}</span>
+              <button class="qty-plus" aria-label="Augmenter la quantité"><i class="fa-solid fa-plus"></i></button>
+            </div>
+          </div>
+          <div class="cart-item-right">
+            <span class="cart-item-subtotal">${formatPrice(p.price * c.qty)}</span>
+            <button class="remove-btn" aria-label="Retirer du panier"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>`;
+    }).join('');
+
+    $('#cart-total').textContent = formatPrice(cartTotal());
+  }
+
+  /* Délégation des clics dans le panier (quantité / suppression) */
+  $('#cart-items').addEventListener('click', function (e) {
+    const itemEl = e.target.closest('.cart-item');
+    if (!itemEl) return;
+    const id = parseInt(itemEl.dataset.id, 10);
+    if (e.target.closest('.qty-plus')) changeQty(id, 1);
+    else if (e.target.closest('.qty-minus')) changeQty(id, -1);
+    else if (e.target.closest('.remove-btn')) {
+      removeFromCart(id);
+      showToast('Produit retiré du panier', 'info');
     }
   });
-}
 
-document.querySelectorAll(".filtre-btn").forEach(btn => {
-  btn.onclick = function() {
-    document.querySelectorAll(".filtre-btn").forEach(b => b.classList.remove("active"));
-    this.classList.add("active");
-    filtrerProduits(this.dataset.filtre);
-  };
-});
+  /* =================================================================
+     4. RENDU DES PRODUITS (catalogue + populaires)
+     ================================================================= */
+  function productCardHTML(p) {
+    const badge = p.badge ? `<span class="badge badge-${p.badge}">${badgeLabel(p.badge)}</span>` : '';
+    const oldPrice = p.oldPrice ? `<span class="price-old">${formatPrice(p.oldPrice)}</span>` : '';
+    return `
+      <article class="product-card" data-id="${p.id}">
+        <div class="product-visual ${gradientClass(p.id)}">
+          ${badge}
+          <i class="${p.icon}"></i>
+        </div>
+        <div class="product-info">
+          <span class="product-category">${p.categoryLabel}</span>
+          <h3 class="product-name">${p.name}</h3>
+          <p class="product-desc">${p.description}</p>
+          <div class="product-rating">${starsHTML(p.rating)} <span>(${p.reviews})</span></div>
+          <div class="product-price-row">
+            <span class="price-current">${formatPrice(p.price)}</span>
+            ${oldPrice}
+          </div>
+          <button class="btn-add-cart" data-id="${p.id}"><i class="fa-solid fa-bag-shopping"></i> Ajouter au panier</button>
+        </div>
+      </article>`;
+  }
 
-document.querySelectorAll(".cat-card").forEach(card => {
-  card.onclick = function() {
-    const filtre = this.dataset.filtre;
-    document.getElementById("produits").scrollIntoView({ behavior: "smooth" });
+  function renderProducts(list) {
+    const grid = $('#product-grid');
+    const noResults = $('#no-results');
+    if (list.length === 0) {
+      grid.innerHTML = '';
+      noResults.classList.add('show');
+      return;
+    }
+    noResults.classList.remove('show');
+    grid.innerHTML = list.map(productCardHTML).join('');
+  }
+
+  function renderPopular() {
+    const track = $('#popular-track');
+    const popular = products.filter(p => p.popular);
+    track.innerHTML = popular.map(productCardHTML).join('');
+  }
+
+  /* Délégation : bouton "Ajouter au panier" sur toutes les grilles produits */
+  document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.btn-add-cart');
+    if (!btn) return;
+    const id = parseInt(btn.dataset.id, 10);
+    const product = findProduct(id);
+    if (!product) return;
+
+    addToCart(id, 1);
+    showToast(`${product.name} ajouté au panier`, 'success');
+
+    const cartBtn = $('#cart-toggle');
+    cartBtn.classList.remove('bump');
+    requestAnimationFrame(() => cartBtn.classList.add('bump'));
+
+    const originalHTML = btn.innerHTML;
+    btn.classList.add('added');
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> Ajouté';
     setTimeout(() => {
-      document.querySelectorAll(".filtre-btn").forEach(b => b.classList.remove("active"));
-      const target = document.querySelector(`.filtre-btn[data-filtre="${filtre}"]`);
-      if (target) target.classList.add("active");
-      filtrerProduits(filtre);
-    }, 600);
-  };
-});
+      btn.classList.remove('added');
+      btn.innerHTML = originalHTML;
+    }, 1300);
+  });
 
-/* =========================================
-   DÉLÉGATION D'ÉVÉNEMENTS — PRODUITS
-   ========================================= */
-document.getElementById("produitsGrid").addEventListener("click", function(e) {
-  const btn = e.target.closest("button");
-  if (!btn) return;
+  /* =================================================================
+     5. RECHERCHE & FILTRES PAR CATÉGORIE
+     ================================================================= */
+  let activeCategory = 'tous';
+  let searchTerm = '';
 
-  // Bouton ajouter au panier
-  if (btn.classList.contains("btn-panier")) {
-    const id = btn.dataset.id;
-    ajouterPanier(id);
-    btn.classList.add("added");
-    btn.innerHTML = "✓ Ajouté !";
-    setTimeout(() => {
-      btn.classList.remove("added");
-      btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg> Ajouter au panier`;
-    }, 1800);
-    return;
+  function applyFilters() {
+    const term = searchTerm.trim().toLowerCase();
+    const filtered = products.filter(p => {
+      const matchCategory = activeCategory === 'tous' || p.category === activeCategory;
+      const matchSearch = !term ||
+        p.name.toLowerCase().includes(term) ||
+        p.description.toLowerCase().includes(term) ||
+        p.categoryLabel.toLowerCase().includes(term);
+      return matchCategory && matchSearch;
+    });
+    renderProducts(filtered);
   }
 
-  // Bouton détail produit
-  if (btn.classList.contains("btn-detail")) {
-    ouvrirModal(btn.dataset.id);
-    return;
+  $('#search-input').addEventListener('input', function (e) {
+    searchTerm = e.target.value;
+    applyFilters();
+  });
+
+  $$('.chip').forEach(chip => {
+    chip.addEventListener('click', function () {
+      $$('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeCategory = chip.dataset.category;
+      applyFilters();
+    });
+  });
+
+  /* Icône loupe de la navbar : va à la boutique et place le focus sur la recherche */
+  $('#search-toggle').addEventListener('click', function () {
+    document.getElementById('boutique').scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => $('#search-input').focus(), 450);
+  });
+
+  /* =================================================================
+     6. AVIS CLIENTS
+     ================================================================= */
+  function renderReviews() {
+    const track = $('#reviews-track');
+    track.innerHTML = reviews.map(r => `
+      <div class="review-card">
+        <div class="review-stars">${starsHTML(r.rating)}</div>
+        <p class="review-text">${r.text}</p>
+        <div class="review-author">
+          <div class="avatar-circle">${initials(r.name)}</div>
+          <div>
+            <strong>${r.name}</strong>
+            <span>${r.role}</span>
+          </div>
+        </div>
+      </div>`).join('');
   }
 
-  // Bouton favori
-  if (btn.classList.contains("btn-wish")) {
-    toggleFavori(btn.dataset.id, btn);
-    return;
-  }
-});
+  $('#reviews-prev').addEventListener('click', () => $('#reviews-track').scrollBy({ left: -320, behavior: 'smooth' }));
+  $('#reviews-next').addEventListener('click', () => $('#reviews-track').scrollBy({ left: 320, behavior: 'smooth' }));
 
-// Restaurer l'état des favoris au chargement
-favoris.forEach(id => {
-  const btn = document.querySelector(`.btn-wish[data-id="${id}"]`);
-  if (btn) { btn.textContent = "♥"; btn.classList.add("wished"); btn.style.color = "#ef4444"; }
-});
+  /* =================================================================
+     7. PANIER LATÉRAL — OUVERTURE / FERMETURE
+     ================================================================= */
+  const overlay = $('#overlay');
+  const cartDrawer = $('#cart-drawer');
+  const navMenu = $('#nav-menu');
+  const hamburger = $('#hamburger-btn');
+  const orderModal = $('#order-modal');
 
-/* =========================================
-   RECHERCHE
-   ========================================= */
-function ouvrirRecherche() {
-  document.getElementById("searchOverlay").classList.add("open");
-  document.body.style.overflow = "hidden";
-  setTimeout(() => document.getElementById("searchInput").focus(), 150);
-}
-function fermerRecherche() {
-  document.getElementById("searchOverlay").classList.remove("open");
-  document.body.style.overflow = "";
-  document.getElementById("searchInput").value = "";
-  document.getElementById("searchResults").innerHTML = "";
-}
-
-document.getElementById("searchBtn").onclick = ouvrirRecherche;
-document.getElementById("searchClose").onclick = fermerRecherche;
-document.getElementById("searchOverlay").onclick = function(e) { if(e.target === this) fermerRecherche(); };
-
-document.getElementById("searchInput").addEventListener("input", function() {
-  const q = this.value.trim().toLowerCase();
-  const zone = document.getElementById("searchResults");
-  if (!q) { zone.innerHTML = ""; return; }
-
-  const results = Object.entries(PRODUITS).filter(([id, p]) =>
-    p.nom.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q)
-  );
-
-  if (results.length === 0) {
-    zone.innerHTML = `<div class="search-empty">Aucun résultat pour « ${q} »</div>`;
-    return;
+  function closeAllPanels() {
+    cartDrawer.classList.remove('open');
+    navMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    orderModal.classList.remove('open');
+    overlay.classList.remove('active');
   }
 
-  zone.innerHTML = results.map(([id, p]) => `
-    <div class="search-result-item" onclick="fermerRecherche();ouvrirModal(${id})">
-      <span class="sri-emoji">${p.emoji}</span>
-      <div class="sri-info">
-        <h4>${p.nom}</h4>
-        <p>${fmt(p.prix)}</p>
-      </div>
-    </div>
-  `).join("");
-});
+  function openCart() {
+    closeAllPanels();
+    renderCart();
+    cartDrawer.classList.add('open');
+    overlay.classList.add('active');
+  }
 
-/* =========================================
-   MENU MOBILE
-   ========================================= */
-document.getElementById("hamburger").onclick = function() {
-  document.getElementById("mobileMenu").classList.add("open");
-  document.getElementById("mobileOverlay").classList.add("show");
-  document.body.style.overflow = "hidden";
-};
-function fermerMobile() {
-  document.getElementById("mobileMenu").classList.remove("open");
-  document.getElementById("mobileOverlay").classList.remove("show");
-  document.body.style.overflow = "";
-}
-document.getElementById("mobileClose").onclick = fermerMobile;
-document.getElementById("mobileOverlay").onclick = fermerMobile;
-document.querySelectorAll(".mobile-link").forEach(l => {
-  l.onclick = fermerMobile;
-});
+  $('#cart-toggle').addEventListener('click', openCart);
+  $('#cart-close').addEventListener('click', closeAllPanels);
+  $('#continue-shopping').addEventListener('click', closeAllPanels);
 
-/* =========================================
-   NAVBAR SCROLL
-   ========================================= */
-window.addEventListener("scroll", function() {
-  document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 50);
-  document.getElementById("btnTop").classList.toggle("show", window.scrollY > 400);
-});
+  $('#checkout-btn').addEventListener('click', function () {
+    if (cart.length === 0) return;
+    const total = formatPrice(cartTotal());
+    const count = cartCount();
+    $('#order-modal-text').textContent =
+      `Votre commande de ${count} article${count > 1 ? 's' : ''} (${total}) a été enregistrée. Notre équipe vous contactera très bientôt.`;
+    clearCart();
+    closeAllPanels();
+    orderModal.classList.add('open');
+    overlay.classList.add('active');
+  });
 
-/* =========================================
-   BACK TO TOP
-   ========================================= */
-document.getElementById("btnTop").onclick = function() {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
+  $('#modal-close').addEventListener('click', closeAllPanels);
 
-/* =========================================
-   FORMULAIRE CONTACT
-   ========================================= */
-document.getElementById("contactForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  const nom   = document.getElementById("nomInput").value.trim();
-  const email = document.getElementById("emailInput").value.trim();
-  const msg   = document.getElementById("msgInput").value.trim();
-
-  if (!nom || !email || !msg) { toast("⚠️ Veuillez remplir les champs obligatoires."); return; }
-
-  const btn = document.getElementById("submitBtn");
-  btn.textContent = "Envoi en cours...";
-  btn.disabled = true;
-
-  setTimeout(() => {
-    const ok = document.getElementById("formSuccess");
-    ok.classList.add("show");
-    this.reset();
-    btn.innerHTML = 'Envoyer le message <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
-    btn.disabled = false;
-    toast("✓ Message envoyé avec succès !");
-    setTimeout(() => ok.classList.remove("show"), 5000);
-  }, 1200);
-});
-
-/* =========================================
-   NEWSLETTER
-   ========================================= */
-document.getElementById("newsletterForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  const email = document.getElementById("nlEmail").value.trim();
-  if (!email) return;
-  this.reset();
-  toast("🎉 Merci ! Vous êtes bien inscrit(e) à notre newsletter.");
-});
-
-/* =========================================
-   ANIMATIONS AU SCROLL
-   ========================================= */
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
-    if (entry.isIntersecting) {
-      setTimeout(() => entry.target.classList.add("in"), i * 70);
-      observer.unobserve(entry.target);
+  /* =================================================================
+     8. MENU MOBILE (hamburger)
+     ================================================================= */
+  hamburger.addEventListener('click', function () {
+    const isOpen = navMenu.classList.contains('open');
+    closeAllPanels();
+    if (!isOpen) {
+      navMenu.classList.add('open');
+      hamburger.classList.add('open');
+      hamburger.setAttribute('aria-expanded', 'true');
+      overlay.classList.add('active');
     }
   });
-}, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
 
-document.querySelectorAll(
-  ".produit-card, .cat-card, .section-header, .apropos-text, .contact-infos, .contact-form, .a-stat, .nl-inner, .promo-inner"
-).forEach(el => {
-  el.classList.add("fade-up");
-  observer.observe(el);
-});
+  $$('.nav-link').forEach(link => {
+    link.addEventListener('click', closeAllPanels);
+  });
 
-/* =========================================
-   ECHAP — ferme tout
-   ========================================= */
-document.addEventListener("keydown", function(e) {
-  if (e.key === "Escape") {
-    fermerModal();
-    fermerPanier();
-    fermerRecherche();
-    fermerMobile();
+  overlay.addEventListener('click', closeAllPanels);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeAllPanels();
+  });
+
+  /* =================================================================
+     9. NAVIGATION : fond au scroll + lien actif
+     ================================================================= */
+  const navbar = $('#navbar');
+
+  window.addEventListener('scroll', function () {
+    navbar.classList.toggle('scrolled', window.scrollY > 30);
+    $('#back-to-top').classList.toggle('show', window.scrollY > 420);
+    updateActiveLink();
+  });
+
+  function updateActiveLink() {
+    const scrollPos = window.scrollY + 140;
+    let currentId = '';
+    $$('section[id]').forEach(sec => {
+      if (sec.offsetTop <= scrollPos) currentId = sec.id;
+    });
+    $$('.nav-link').forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + currentId);
+    });
   }
-});
 
-/* =========================================
-   TOAST
-   ========================================= */
-function toast(msg) {
-  const zone = document.getElementById("toastZone");
-  const el = document.createElement("div");
-  el.className = "toast";
-  el.textContent = msg;
-  zone.appendChild(el);
-  setTimeout(() => el.remove(), 3200);
-}
+  $('#back-to-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-/* =========================================
-   FORMAT PRIX
-   ========================================= */
-function fmt(n) { return Number(n).toLocaleString("fr-FR") + " Ar"; }
+  /* =================================================================
+     10. BARRE D'ANNONCE — messages tournants
+     ================================================================= */
+  const announcements = [
+    "✨ Livraison offerte à partir de 100 000 Ar",
+    "🎉 Jusqu'à -25% sur une sélection de produits",
+    "💜 Nouvelle collection disponible dès maintenant"
+  ];
+  let annIndex = 0;
+  const annText = $('#announcement-text');
+  setInterval(() => {
+    annIndex = (annIndex + 1) % announcements.length;
+    annText.style.opacity = 0;
+    setTimeout(() => {
+      annText.textContent = announcements[annIndex];
+      annText.style.opacity = 1;
+    }, 250);
+  }, 4500);
 
-/* =========================================
-   INIT
-   ========================================= */
-majCartBadge();
-console.log("✅ Fy Riah — site chargé avec succès !");
+  $('#announcement-close').addEventListener('click', () => {
+    $('#announcement-bar').classList.add('hidden');
+  });
+
+  /* =================================================================
+     11. TOASTS
+     ================================================================= */
+  function showToast(message, type) {
+    type = type || 'info';
+    const icons = { success: 'fa-circle-check', error: 'fa-circle-exclamation', info: 'fa-circle-info' };
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `<i class="fa-solid ${icons[type]}"></i><span>${message}</span>`;
+    $('#toast-container').appendChild(toast);
+    setTimeout(() => {
+      toast.classList.add('hide');
+      setTimeout(() => toast.remove(), 350);
+    }, 3200);
+  }
+
+  /* =================================================================
+     12. FORMULAIRE DE CONTACT — validation JavaScript
+     ================================================================= */
+  const contactForm = $('#contact-form');
+  const fields = {
+    name: { input: $('#cf-name'), error: $('#err-name') },
+    email: { input: $('#cf-email'), error: $('#err-email') },
+    subject: { input: $('#cf-subject'), error: $('#err-subject') },
+    message: { input: $('#cf-message'), error: $('#err-message') }
+  };
+
+  function setError(field, message) {
+    field.input.closest('.form-group').classList.toggle('error', !!message);
+    field.error.textContent = message || '';
+  }
+
+  function validateField(key) {
+    const value = fields[key].input.value.trim();
+    if (key === 'name') {
+      if (value.length < 2) { setError(fields.name, 'Veuillez indiquer votre nom (2 caractères minimum).'); return false; }
+    }
+    if (key === 'email') {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!re.test(value)) { setError(fields.email, 'Veuillez saisir une adresse e-mail valide.'); return false; }
+    }
+    if (key === 'subject') {
+      if (!value) { setError(fields.subject, 'Veuillez choisir un sujet.'); return false; }
+    }
+    if (key === 'message') {
+      if (value.length < 10) { setError(fields.message, 'Votre message doit contenir au moins 10 caractères.'); return false; }
+    }
+    setError(fields[key], '');
+    return true;
+  }
+
+  Object.keys(fields).forEach(key => {
+    fields[key].input.addEventListener('blur', () => validateField(key));
+    fields[key].input.addEventListener('input', () => {
+      if (fields[key].input.closest('.form-group').classList.contains('error')) validateField(key);
+    });
+  });
+
+  contactForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const results = Object.keys(fields).map(validateField);
+    const allValid = results.every(Boolean);
+    if (!allValid) {
+      showToast('Merci de corriger les champs en rouge.', 'error');
+      return;
+    }
+
+    const submitBtn = $('#cf-submit');
+    submitBtn.classList.add('is-loading');
+
+    setTimeout(() => {
+      submitBtn.classList.remove('is-loading');
+      $('#form-success').classList.add('show');
+      showToast('Message envoyé avec succès !', 'success');
+      contactForm.reset();
+      Object.keys(fields).forEach(key => setError(fields[key], ''));
+      setTimeout(() => $('#form-success').classList.remove('show'), 4500);
+    }, 1100);
+  });
+
+  /* Newsletter (pied de page) */
+  $('#newsletter-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const input = $('#newsletter-email');
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!re.test(input.value.trim())) {
+      showToast('Veuillez saisir une adresse e-mail valide.', 'error');
+      return;
+    }
+    showToast('Merci pour votre inscription à la newsletter !', 'success');
+    input.value = '';
+  });
+
+  /* =================================================================
+     13. ANIMATIONS AU DÉFILEMENT (IntersectionObserver)
+     ================================================================= */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  $$('.reveal').forEach(el => revealObserver.observe(el));
+
+  /* Compteur animé des statistiques (section À propos) */
+  let statsAnimated = false;
+  const statsSection = $('.about-stats');
+  function animateStats() {
+    if (statsAnimated) return;
+    statsAnimated = true;
+    $$('.stat-number').forEach(el => {
+      const target = parseInt(el.dataset.target, 10);
+      const duration = 1200;
+      const start = performance.now();
+      function step(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        el.textContent = Math.floor(progress * target);
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = target;
+      }
+      requestAnimationFrame(step);
+    });
+  }
+  if (statsSection) {
+    new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { animateStats(); obs.disconnect(); }
+      });
+    }, { threshold: 0.4 }).observe(statsSection);
+  }
+
+  /* =================================================================
+     14. INITIALISATION
+     ================================================================= */
+  renderProducts(products);
+  renderPopular();
+  renderReviews();
+  renderCart();
+  updateActiveLink();
+
+})();
