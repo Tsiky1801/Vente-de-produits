@@ -1,393 +1,355 @@
-<!DOCTYPE html>
+>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LUXE SHOP — Boutique en Ligne</title>
+  <meta name="description" content="Fy Riah — Mode & Lifestyle Premium. Découvrez des pièces uniques sélectionnées avec soin." />
+  <title>Fy Riah — Mode & Lifestyle Premium</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-  <!-- ===== NAVBAR ===== -->
-  <header class="navbar" id="navbar">
-    <div class="nav-logo">LUXE<span>SHOP</span></div>
-    <nav class="nav-links">
-      <a href="#accueil">Accueil</a>
-      <a href="#produits">Produits</a>
-      <a href="#apropos">À Propos</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <div class="nav-actions">
-      <button class="btn-search" id="searchBtn" aria-label="Recherche">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </button>
-      <button class="btn-cart" id="cartBtn" aria-label="Panier">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        <span class="cart-count" id="cartCount">0</span>
-      </button>
-      <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
+  <!-- RIDEAU D'ENTRÉE (signature animée) -->
+  <div class="curtain" id="curtain" aria-hidden="true">
+    <div class="curtain__logo">Fy Riah</div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+  <!-- NAVIGATION -->
+  <header class="nav" id="nav" role="banner">
+    <div class="nav__inner">
+      <a href="#accueil" class="nav__logo" aria-label="Fy Riah — Accueil">Fy Riah</a>
+
+      <nav class="nav__links" id="navLinks" aria-label="Navigation principale">
+        <a href="#accueil"   class="nav__link">Accueil</a>
+        <a href="#produits"  class="nav__link">Boutique</a>
+        <a href="#populaires" class="nav__link">Tendances</a>
+        <a href="#apropos"   class="nav__link">À propos</a>
+        <a href="#avis"      class="nav__link">Avis</a>
+        <a href="#contact"   class="nav__link">Contact</a>
+      </nav>
+
+      <div class="nav__actions">
+        <button class="nav__icon-btn" id="searchToggle" aria-label="Rechercher" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+        <button class="nav__icon-btn" id="cartToggle" aria-label="Panier" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="nav__badge" id="cartBadge">0</span>
+        </button>
+        <button class="nav__hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Barre de recherche -->
+    <div class="search-bar" id="searchBar" aria-hidden="true">
+      <div class="search-bar__inner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="search" id="searchInput" class="search-bar__input" placeholder="Rechercher un produit…" aria-label="Rechercher" autocomplete="off" />
+        <button class="search-bar__close" id="searchClose" aria-label="Fermer">✕</button>
+      </div>
+      <div class="search-results" id="searchResults" role="listbox"></div>
     </div>
   </header>
 
-  <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#accueil">Accueil</a>
-    <a href="#produits">Produits</a>
-    <a href="#apropos">À Propos</a>
-    <a href="#contact">Contact</a>
-  </div>
-
-  <!-- Search Bar -->
-  <div class="search-bar" id="searchBar">
-    <input type="text" id="searchInput" placeholder="Rechercher un produit..." />
-    <button id="searchClose">✕</button>
-  </div>
-
-  <!-- ===== HERO ===== -->
-  <section class="hero" id="accueil">
-    <div class="hero-bg"></div>
-    <div class="hero-content">
-      <p class="hero-tag">Nouvelle Collection 2025</p>
-      <h1 class="hero-title">L'Art du<br/><em>Shopping</em> Raffiné</h1>
-      <p class="hero-sub">Découvrez des produits soigneusement sélectionnés pour votre style de vie moderne.</p>
-      <div class="hero-btns">
-        <a href="#produits" class="btn-primary">Découvrir</a>
-        <a href="#apropos" class="btn-ghost">En savoir plus</a>
-      </div>
+  <!-- PANIER LATÉRAL -->
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Panier" aria-hidden="true">
+    <div class="cart-drawer__header">
+      <h2>Votre panier</h2>
+      <button class="cart-drawer__close" id="cartClose" aria-label="Fermer">✕</button>
     </div>
-    <div class="hero-scroll">
-      <span>Défiler</span>
-      <div class="scroll-line"></div>
-    </div>
-  </section>
+    <div class="cart-drawer__body" id="cartBody"></div>
+    <div class="cart-drawer__footer" id="cartFooter"></div>
+  </aside>
+  <div class="overlay" id="overlay" aria-hidden="true"></div>
 
-  <!-- ===== CATEGORIES ===== -->
-  <section class="categories">
-    <div class="container">
-      <div class="cat-grid">
-        <div class="cat-card" data-filter="mode">
-          <div class="cat-icon">👗</div>
-          <h3>Mode</h3>
-          <p>Vêtements & Accessoires</p>
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" id="accueil" aria-label="Bannière principale">
+      <div class="hero__bg" aria-hidden="true">
+        <div class="hero__orb hero__orb--1"></div>
+        <div class="hero__orb hero__orb--2"></div>
+        <div class="hero__orb hero__orb--3"></div>
+        <div class="hero__grid"></div>
+      </div>
+      <div class="hero__content">
+        <p class="hero__eyebrow">✦ Collection Printemps 2026</p>
+        <h1 class="hero__title">L'élégance<br /><em>redéfinie.</em></h1>
+        <p class="hero__subtitle">Pièces premium sélectionnées pour celles et ceux qui refusent l'ordinaire. Qualité exceptionnelle, style intemporel.</p>
+        <div class="hero__actions">
+          <a href="#produits" class="btn btn--primary">Acheter maintenant</a>
+          <a href="#apropos" class="btn btn--ghost">Notre histoire</a>
         </div>
-        <div class="cat-card" data-filter="beaute">
-          <div class="cat-icon">✨</div>
-          <h3>Beauté</h3>
-          <p>Soins & Cosmétiques</p>
-        </div>
-        <div class="cat-card" data-filter="maison">
-          <div class="cat-icon">🏡</div>
-          <h3>Maison</h3>
-          <p>Déco & Art de Vivre</p>
-        </div>
-        <div class="cat-card" data-filter="tech">
-          <div class="cat-icon">💻</div>
-          <h3>Tech</h3>
-          <p>Gadgets & Électronique</p>
+        <div class="hero__trust">
+          <div class="hero__trust-item"><strong>+12 000</strong><span>Clients</span></div>
+          <div class="hero__trust-sep" aria-hidden="true"></div>
+          <div class="hero__trust-item"><strong>Livraison</strong><span>dès 80 €</span></div>
+          <div class="hero__trust-sep" aria-hidden="true"></div>
+          <div class="hero__trust-item"><strong>Retours</strong><span>30 jours</span></div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- ===== PRODUITS ===== -->
-  <section class="produits" id="produits">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-tag">Notre Sélection</p>
-        <h2>Produits Phares</h2>
-      </div>
-
-      <!-- Filtres -->
-      <div class="filtres">
-        <button class="filtre-btn active" data-filtre="tous">Tous</button>
-        <button class="filtre-btn" data-filtre="mode">Mode</button>
-        <button class="filtre-btn" data-filtre="beaute">Beauté</button>
-        <button class="filtre-btn" data-filtre="maison">Maison</button>
-        <button class="filtre-btn" data-filtre="tech">Tech</button>
-      </div>
-
-      <!-- Grille produits -->
-      <div class="produits-grid" id="produitsGrid">
-
-        <!-- Produit 1 -->
-        <div class="produit-card" data-categorie="mode">
-          <div class="produit-img" style="background: linear-gradient(135deg,#f5e6d3,#e8cba8)">
-            <span class="produit-emoji">👗</span>
-            <span class="badge">Nouveau</span>
-            <div class="produit-overlay">
-              <button class="btn-detail" data-id="1">Voir détails</button>
-            </div>
-          </div>
-          <div class="produit-info">
-            <span class="produit-cat">Mode</span>
-            <h3>Robe Élégante Dorée</h3>
-            <div class="produit-prix">
-              <span class="prix-actuel">89 000 Ar</span>
-              <span class="prix-ancien">110 000 Ar</span>
-            </div>
-            <div class="produit-stars">★★★★☆ <span>(42)</span></div>
-            <button class="btn-panier" data-id="1" data-nom="Robe Élégante Dorée" data-prix="89000">Ajouter au Panier</button>
+      <div class="hero__visual" aria-hidden="true">
+        <div class="hero__card hero__card--main">
+          <div class="hero__card-img" style="background:linear-gradient(135deg,#6B21A8,#A855F7,#EC4899)"></div>
+          <div class="hero__card-info">
+            <span class="badge-new">Nouveau</span>
+            <p class="hero__card-name">Robe Velours Aubergine</p>
+            <p class="hero__card-price">129 €</p>
           </div>
         </div>
-
-        <!-- Produit 2 -->
-        <div class="produit-card" data-categorie="beaute">
-          <div class="produit-img" style="background: linear-gradient(135deg,#fce4ec,#f8bbd9)">
-            <span class="produit-emoji">✨</span>
-            <span class="badge badge-promo">-20%</span>
-            <div class="produit-overlay">
-              <button class="btn-detail" data-id="2">Voir détails</button>
-            </div>
-          </div>
-          <div class="produit-info">
-            <span class="produit-cat">Beauté</span>
-            <h3>Sérum Éclat Naturel</h3>
-            <div class="produit-prix">
-              <span class="prix-actuel">45 000 Ar</span>
-              <span class="prix-ancien">56 000 Ar</span>
-            </div>
-            <div class="produit-stars">★★★★★ <span>(89)</span></div>
-            <button class="btn-panier" data-id="2" data-nom="Sérum Éclat Naturel" data-prix="45000">Ajouter au Panier</button>
-          </div>
-        </div>
-
-        <!-- Produit 3 -->
-        <div class="produit-card" data-categorie="maison">
-          <div class="produit-img" style="background: linear-gradient(135deg,#e8f5e9,#c8e6c9)">
-            <span class="produit-emoji">🏡</span>
-            <div class="produit-overlay">
-              <button class="btn-detail" data-id="3">Voir détails</button>
-            </div>
-          </div>
-          <div class="produit-info">
-            <span class="produit-cat">Maison</span>
-            <h3>Vase Céramique Artisan</h3>
-            <div class="produit-prix">
-              <span class="prix-actuel">62 000 Ar</span>
-            </div>
-            <div class="produit-stars">★★★★☆ <span>(31)</span></div>
-            <button class="btn-panier" data-id="3" data-nom="Vase Céramique Artisan" data-prix="62000">Ajouter au Panier</button>
-          </div>
-        </div>
-
-        <!-- Produit 4 -->
-        <div class="produit-card" data-categorie="tech">
-          <div class="produit-img" style="background: linear-gradient(135deg,#e3f2fd,#bbdefb)">
-            <span class="produit-emoji">🎧</span>
-            <span class="badge badge-hot">Populaire</span>
-            <div class="produit-overlay">
-              <button class="btn-detail" data-id="4">Voir détails</button>
-            </div>
-          </div>
-          <div class="produit-info">
-            <span class="produit-cat">Tech</span>
-            <h3>Casque Audio Premium</h3>
-            <div class="produit-prix">
-              <span class="prix-actuel">185 000 Ar</span>
-              <span class="prix-ancien">220 000 Ar</span>
-            </div>
-            <div class="produit-stars">★★★★★ <span>(156)</span></div>
-            <button class="btn-panier" data-id="4" data-nom="Casque Audio Premium" data-prix="185000">Ajouter au Panier</button>
-          </div>
-        </div>
-
-        <!-- Produit 5 -->
-        <div class="produit-card" data-categorie="mode">
-          <div class="produit-img" style="background: linear-gradient(135deg,#f3e5f5,#ce93d8)">
-            <span class="produit-emoji">👜</span>
-            <div class="produit-overlay">
-              <button class="btn-detail" data-id="5">Voir détails</button>
-            </div>
-          </div>
-          <div class="produit-info">
-            <span class="produit-cat">Mode</span>
-            <h3>Sac à Main Luxe</h3>
-            <div class="produit-prix">
-              <span class="prix-actuel">135 000 Ar</span>
-            </div>
-            <div class="produit-stars">★★★★☆ <span>(67)</span></div>
-            <button class="btn-panier" data-id="5" data-nom="Sac à Main Luxe" data-prix="135000">Ajouter au Panier</button>
-          </div>
-        </div>
-
-        <!-- Produit 6 -->
-        <div class="produit-card" data-categorie="tech">
-          <div class="produit-img" style="background: linear-gradient(135deg,#fff8e1,#ffe082)">
-            <span class="produit-emoji">⌚</span>
-            <span class="badge">Nouveau</span>
-            <div class="produit-overlay">
-              <button class="btn-detail" data-id="6">Voir détails</button>
-            </div>
-          </div>
-          <div class="produit-info">
-            <span class="produit-cat">Tech</span>
-            <h3>Montre Connectée Or</h3>
-            <div class="produit-prix">
-              <span class="prix-actuel">250 000 Ar</span>
-              <span class="prix-ancien">300 000 Ar</span>
-            </div>
-            <div class="produit-stars">★★★★★ <span>(203)</span></div>
-            <button class="btn-panier" data-id="6" data-nom="Montre Connectée Or" data-prix="250000">Ajouter au Panier</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== PROMO BANNER ===== -->
-  <section class="promo-banner">
-    <div class="container">
-      <div class="promo-content">
-        <h2>Livraison Gratuite</h2>
-        <p>Pour toute commande supérieure à <strong>150 000 Ar</strong></p>
-        <a href="#produits" class="btn-primary">J'en profite</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== À PROPOS ===== -->
-  <section class="apropos" id="apropos">
-    <div class="container">
-      <div class="apropos-grid">
-        <div class="apropos-visuel">
-          <div class="apropos-img-block">
-            <span>🛍️</span>
-          </div>
-        </div>
-        <div class="apropos-texte">
-          <p class="section-tag">Notre Histoire</p>
-          <h2>Pourquoi Nous Choisir ?</h2>
-          <p>Chez <strong>LUXE SHOP</strong>, nous croyons que chaque achat est une expérience. Depuis notre création, nous sélectionnons avec soin les produits les plus raffinés pour vous offrir le meilleur.</p>
-          <ul class="apropos-list">
-            <li><span>✓</span> Produits certifiés et de haute qualité</li>
-            <li><span>✓</span> Livraison rapide partout à Madagascar</li>
-            <li><span>✓</span> Service client disponible 7j/7</li>
-            <li><span>✓</span> Retours gratuits sous 30 jours</li>
-          </ul>
-          <div class="apropos-stats">
-            <div class="stat"><strong>5K+</strong><span>Clients Satisfaits</span></div>
-            <div class="stat"><strong>200+</strong><span>Produits</span></div>
-            <div class="stat"><strong>98%</strong><span>Satisfaction</span></div>
-          </div>
+        <div class="hero__card hero__card--badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <div><strong>2 341</strong><span>wishlist</span></div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ===== CONTACT ===== -->
-  <section class="contact" id="contact">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-tag">Contactez-nous</p>
-        <h2>On est là pour Vous</h2>
+    <!-- AVANTAGES -->
+    <section class="perks" aria-label="Avantages">
+      <div class="perks__inner">
+        <div class="perks__item">
+          <svg class="perks__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <div><strong>Livraison rapide</strong><span>Expédition sous 24h</span></div>
+        </div>
+        <div class="perks__item">
+          <svg class="perks__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div><strong>Paiement sécurisé</strong><span>SSL 256 bits</span></div>
+        </div>
+        <div class="perks__item">
+          <svg class="perks__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 10h10a8 8 0 0 1 8 8v2M3 10l6-6M3 10l6 6"/></svg>
+          <div><strong>Retours offerts</strong><span>30 jours sans conditions</span></div>
+        </div>
+        <div class="perks__item">
+          <svg class="perks__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 12 19.79 19.79 0 0 1 1.89 3.4 2 2 0 0 1 3.86 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91A16 16 0 0 0 16 16.91l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <div><strong>Support 7j/7</strong><span>Chat ou email</span></div>
+        </div>
       </div>
-      <div class="contact-grid">
-        <div class="contact-infos">
-          <div class="contact-item">
-            <span>📍</span>
-            <div>
-              <h4>Adresse</h4>
-              <p>Antananarivo, Madagascar</p>
+    </section>
+
+    <!-- CATALOGUE -->
+    <section class="section" id="produits" aria-labelledby="products-title">
+      <div class="section__inner">
+        <header class="section__header">
+          <p class="section__eyebrow">Boutique</p>
+          <h2 class="section__title" id="products-title">Notre Collection</h2>
+          <p class="section__desc">Des pièces soigneusement sélectionnées pour sublimer votre quotidien.</p>
+        </header>
+        <div class="filter-bar" role="group" aria-label="Filtrer">
+          <button class="filter-btn active" data-filter="all">Tout</button>
+          <button class="filter-btn" data-filter="robes">Robes</button>
+          <button class="filter-btn" data-filter="hauts">Hauts</button>
+          <button class="filter-btn" data-filter="accessoires">Accessoires</button>
+          <button class="filter-btn" data-filter="sacs">Sacs</button>
+        </div>
+        <div class="products-grid" id="productsGrid" role="list"></div>
+      </div>
+    </section>
+
+    <!-- BEST-SELLERS -->
+    <section class="section popular-section" id="populaires" aria-labelledby="popular-title">
+      <div class="section__inner">
+        <header class="section__header">
+          <p class="section__eyebrow">Tendances</p>
+          <h2 class="section__title" id="popular-title">Nos Best-Sellers</h2>
+          <p class="section__desc">Ce que nos clientes s'arrachent cette saison.</p>
+        </header>
+        <div class="popular-grid" id="popularGrid" role="list"></div>
+      </div>
+    </section>
+
+    <!-- PROMO BANNER -->
+    <section class="promo-banner" aria-label="Offre promotionnelle">
+      <div class="promo-banner__inner">
+        <div>
+          <p class="promo-banner__eyebrow">Offre limitée</p>
+          <h2 class="promo-banner__title">-20% sur toute la collection Été</h2>
+          <p class="promo-banner__sub">Code : <strong>FY20</strong> · Valable jusqu'au 30 juin</p>
+        </div>
+        <a href="#produits" class="btn btn--white">Profiter de l'offre</a>
+      </div>
+    </section>
+
+    <!-- À PROPOS -->
+    <section class="section" id="apropos" aria-labelledby="about-title">
+      <div class="section__inner about-inner">
+        <div class="about__visual" aria-hidden="true">
+          <div class="about__img about__img--main"></div>
+          <div class="about__img about__img--accent"></div>
+          <div class="about__stat-card">
+            <strong>2019</strong>
+            <span>Fondation de Fy Riah</span>
+          </div>
+        </div>
+        <div class="about__content">
+          <p class="section__eyebrow">Notre histoire</p>
+          <h2 class="section__title about__title" id="about-title">Fy Riah, l'art de s'habiller autrement.</h2>
+          <p class="about__text">Née en 2019 à Paris, Fy Riah est une maison de mode indépendante fondée sur une conviction simple : la qualité ne devrait pas être un privilège. Nous sélectionnons chaque pièce avec une exigence absolue — matières nobles, coupes intemporelles, finitions irréprochables.</p>
+          <p class="about__text">Chaque collection raconte une histoire. Celle de femmes et d'hommes qui choisissent de porter leurs valeurs aussi bien que leurs vêtements.</p>
+          <div class="about__values">
+            <div class="about__value">
+              <div class="about__value-icon">✦</div>
+              <div><strong>Qualité premium</strong><span>Matières certifiées, fournisseurs éthiques</span></div>
+            </div>
+            <div class="about__value">
+              <div class="about__value-icon">◈</div>
+              <div><strong>Mode consciente</strong><span>Collections capsule, production responsable</span></div>
+            </div>
+            <div class="about__value">
+              <div class="about__value-icon">◉</div>
+              <div><strong>Style intemporel</strong><span>Des pièces qui traversent les saisons</span></div>
             </div>
           </div>
-          <div class="contact-item">
-            <span>📞</span>
-            <div>
-              <h4>Téléphone</h4>
-              <p>+261 34 00 000 00</p>
-            </div>
+          <a href="#produits" class="btn btn--primary" style="margin-top:2rem;display:inline-flex">Découvrir la collection</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- AVIS -->
+    <section class="section reviews-section" id="avis" aria-labelledby="reviews-title">
+      <div class="section__inner">
+        <header class="section__header">
+          <p class="section__eyebrow">Témoignages</p>
+          <h2 class="section__title" id="reviews-title">Ce qu'elles disent</h2>
+          <div class="reviews-meta" aria-label="Note globale 4.9 sur 5">
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <strong>4.9/5</strong>
+            <span>· 1 247 avis vérifiés</span>
           </div>
-          <div class="contact-item">
-            <span>✉️</span>
-            <div>
-              <h4>Email</h4>
-              <p>contact@luxeshop.mg</p>
+        </header>
+        <div class="reviews-grid" role="list">
+          <article class="review-card" role="listitem">
+            <div class="stars" aria-label="5 étoiles">★★★★★</div>
+            <p>"Qualité incroyable. La robe velours est encore plus belle en vrai — le tissu est divin. Livraison ultra-rapide. Je suis conquise !"</p>
+            <footer class="review-card__author">
+              <div class="review-card__avatar">SB</div>
+              <div><strong>Sophie B.</strong><span>Paris, 75</span></div>
+            </footer>
+          </article>
+          <article class="review-card review-card--featured" role="listitem">
+            <div class="stars" aria-label="5 étoiles">★★★★★</div>
+            <p>"Fy Riah a complètement changé ma façon de m'habiller. Des pièces qui durent, qui ne se démodent pas. Je recommande les yeux fermés."</p>
+            <footer class="review-card__author">
+              <div class="review-card__avatar">MN</div>
+              <div><strong>Mériem N.</strong><span>Lyon, 69</span></div>
+            </footer>
+          </article>
+          <article class="review-card" role="listitem">
+            <div class="stars" aria-label="5 étoiles">★★★★★</div>
+            <p>"Service client au top. Réponse en 10 minutes. Le sac que j'ai commandé est magnifique, exactement comme les photos."</p>
+            <footer class="review-card__author">
+              <div class="review-card__avatar">CL</div>
+              <div><strong>Clara L.</strong><span>Bordeaux, 33</span></div>
+            </footer>
+          </article>
+          <article class="review-card" role="listitem">
+            <div class="stars" aria-label="4 étoiles">★★★★☆</div>
+            <p>"Superbe blouse, les matières sont de grande qualité. La coupe est parfaite, le M tombe impeccablement. Retours faciles également."</p>
+            <footer class="review-card__author">
+              <div class="review-card__avatar">AL</div>
+              <div><strong>Amandine L.</strong><span>Toulouse, 31</span></div>
+            </footer>
+          </article>
+          <article class="review-card" role="listitem">
+            <div class="stars" aria-label="5 étoiles">★★★★★</div>
+            <p>"Les couleurs sont exactement celles du site. La jupe portefeuille est mon coup de cœur de l'année."</p>
+            <footer class="review-card__author">
+              <div class="review-card__avatar">RP</div>
+              <div><strong>Rania P.</strong><span>Marseille, 13</span></div>
+            </footer>
+          </article>
+          <article class="review-card" role="listitem">
+            <div class="stars" aria-label="5 étoiles">★★★★★</div>
+            <p>"Emballage soigné, carte personnalisée à l'intérieur — on sent vraiment que la marque prend soin de ses clients."</p>
+            <footer class="review-card__author">
+              <div class="review-card__avatar">JD</div>
+              <div><strong>Julie D.</strong><span>Nantes, 44</span></div>
+            </footer>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section" id="contact" aria-labelledby="contact-title">
+      <div class="section__inner contact-inner">
+        <div class="contact__info">
+          <p class="section__eyebrow">Nous contacter</p>
+          <h2 class="section__title contact__title" id="contact-title">Une question ?<br />On est là.</h2>
+          <p class="contact__text">Notre équipe répond sous 2h en semaine, 8h le week-end.</p>
+          <div class="contact__details">
+            <div class="contact__detail">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" width="18" height="18"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <span>bonjour@fyriah.com</span>
+            </div>
+            <div class="contact__detail">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" width="18" height="18"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-7-7 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 3.86 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91A16 16 0 0 0 16 16.91l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <span>+33 1 23 45 67 89</span>
+            </div>
+            <div class="contact__detail">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" width="18" height="18"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>42 Rue du Faubourg Saint-Honoré, Paris</span>
             </div>
           </div>
         </div>
-        <form class="contact-form" id="contactForm">
-          <div class="form-group">
-            <input type="text" id="nomInput" placeholder="Votre nom" required />
+
+        <form class="contact-form" id="contactForm" novalidate aria-label="Formulaire de contact">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fname" class="form-label">Prénom *</label>
+              <input type="text" id="fname" name="fname" class="form-input" placeholder="Sophie" required autocomplete="given-name" />
+              <span class="form-error" id="fnameError" role="alert"></span>
+            </div>
+            <div class="form-group">
+              <label for="lname" class="form-label">Nom *</label>
+              <input type="text" id="lname" name="lname" class="form-input" placeholder="Bernard" required autocomplete="family-name" />
+              <span class="form-error" id="lnameError" role="alert"></span>
+            </div>
           </div>
           <div class="form-group">
-            <input type="email" id="emailInput" placeholder="Votre email" required />
+            <label for="email" class="form-label">Email *</label>
+            <input type="email" id="email" name="email" class="form-input" placeholder="sophie@exemple.com" required autocomplete="email" />
+            <span class="form-error" id="emailError" role="alert"></span>
           </div>
           <div class="form-group">
-            <textarea id="msgInput" placeholder="Votre message..." rows="5" required></textarea>
+            <label for="subject" class="form-label">Sujet *</label>
+            <select id="subject" name="subject" class="form-input" required>
+              <option value="">Choisir un sujet…</option>
+              <option value="commande">Ma commande</option>
+              <option value="produit">Question produit</option>
+              <option value="retour">Retour / Échange</option>
+              <option value="autre">Autre</option>
+            </select>
+            <span class="form-error" id="subjectError" role="alert"></span>
           </div>
-          <button type="submit" class="btn-primary">Envoyer le Message</button>
-          <p class="form-success" id="formSuccess">✓ Message envoyé avec succès !</p>
+          <div class="form-group">
+            <label for="message" class="form-label">Message *</label>
+            <textarea id="message" name="message" class="form-input form-textarea" placeholder="Décrivez votre demande…" rows="5" required></textarea>
+            <span class="form-error" id="messageError" role="alert"></span>
+          </div>
+          <button type="submit" class="btn btn--primary btn--full">
+            Envoyer le message
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+          <div class="form-success" id="formSuccess" role="alert" aria-live="polite"></div>
         </form>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ===== FOOTER ===== -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <div class="nav-logo">LUXE<span>SHOP</span></div>
-          <p>Votre destination shopping premium à Madagascar.</p>
-        </div>
-        <div class="footer-links">
-          <h4>Navigation</h4>
-          <a href="#accueil">Accueil</a>
-          <a href="#produits">Produits</a>
-          <a href="#apropos">À Propos</a>
-          <a href="#contact">Contact</a>
-        </div>
-        <div class="footer-links">
-          <h4>Politique</h4>
-          <a href="#">Livraison</a>
-          <a href="#">Retours</a>
-          <a href="#">Confidentialité</a>
-          <a href="#">CGV</a>
-        </div>
-        <div class="footer-social">
-          <h4>Réseaux Sociaux</h4>
-          <div class="social-icons">
-            <a href="#" aria-label="Facebook">📘</a>
-            <a href="#" aria-label="Instagram">📸</a>
-            <a href="#" aria-label="WhatsApp">💬</a>
-            <a href="#" aria-label="TikTok">🎵</a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>© 2025 LUXE SHOP. Tous droits réservés. Fait avec ❤️ à Madagascar.</p>
-      </div>
-    </div>
-  </footer>
+  </main>
 
-  <!-- ===== PANIER MODAL ===== -->
-  <div class="cart-modal" id="cartModal">
-    <div class="cart-panel">
-      <div class="cart-header">
-        <h3>Mon Panier</h3>
-        <button id="cartClose">✕</button>
-      </div>
-      <div class="cart-body" id="cartBody">
-        <p class="cart-vide">Votre panier est vide.</p>
-      </div>
-      <div class="cart-footer">
-        <div class="cart-total">
-          <span>Total :</span>
-          <strong id="cartTotal">0 Ar</strong>
-        </div>
-        <button class="btn-primary w100" id="checkoutBtn">Commander</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== NOTIFICATION TOAST ===== -->
-  <div class="toast" id="toast"></div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__top">
+      <div class="footer__inner">
+        <div class="footer__brand">
+          <a href="#accueil" class="footer__logo">Fy Riah</a>
+          <p class="footer__tagline">L'élégance au quotidien.</p>
+          <p class="footer__desc">
