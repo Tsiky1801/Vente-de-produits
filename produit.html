@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUVŌ — Tsiky Fanantenana</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== BANNIÈRE PROMO TICKER ===== -->
+  <div class="promo-bar">
+    <div class="promo-bar__track">
+      <span>🎉 -20% sur toute la collection avec le code <strong>NUVO20</strong></span>
+      <span>🚚 Livraison gratuite à partir de 150 000 Ar</span>
+      <span>⭐ Retour gratuit sous 30 jours</span>
+      <span>📞 Contact : 038 979 11 95</span>
+      <span>🎉 -20% sur toute la collection avec le code <strong>NUVO20</strong></span>
+      <span>🚚 Livraison gratuite à partir de 150 000 Ar</span>
+      <span>⭐ Retour gratuit sous 30 jours</span>
+      <span>📞 Contact : 038 979 11 95</span>
+    </div>
+  </div>
+
+  <!-- ===== EN-TÊTE ===== -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="#accueil" class="logo">NUV<span>Ō</span></a>
+      <nav class="nav">
+        <a href="#accueil">Accueil</a>
+        <a href="#produits">Produits</a>
+        <a href="#avantages">À propos</a>
+        <a href="#contact">Contact</a>
+        <!-- Bouton panier : c'est le "menu" pour voir les produits déjà ajoutés -->
+        <button class="nav__cta" id="btn-open-cart" onclick="ouvrirPanier()">
+          🛒 Panier (<span id="cart-count">0</span>)
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="accueil">
+    <div class="container hero__inner">
+      <p class="hero__eyebrow">Nouvelle collection 2025</p>
+      <h1 class="hero__title">Le style<br /><span class="hero__title--accent">redéfini.</span></h1>
+      <p class="hero__sub">Des produits soigneusement sélectionnés pour ceux qui refusent l'ordinaire. Qualité, design et durabilité réunis.</p>
+      <a href="#produits" class="btn btn--primary">Acheter maintenant</a>
+    </div>
+    <div class="hero__glow" aria-hidden="true"></div>
+  </section>
+
+  <!-- ===== PRODUITS + FILTRES CSS ===== -->
+  <section class="products" id="produits">
+    <div class="container">
+      <h2 class="section__title">Nos <span>produits</span></h2>
+      <p class="section__sub">Une sélection exclusive, pensée pour vous.</p>
+
+      <div class="filters">
+        <input type="radio" name="filtre" id="f-tous"      class="filter-input" checked />
+        <input type="radio" name="filtre" id="f-tech"      class="filter-input" />
+        <input type="radio" name="filtre" id="f-mode"      class="filter-input" />
+        <input type="radio" name="filtre" id="f-lifestyle" class="filter-input" />
+
+        <div class="filters__labels">
+          <label for="f-tous">Tous</label>
+          <label for="f-tech">Tech</label>
+          <label for="f-mode">Mode</label>
+          <label for="f-lifestyle">Lifestyle</label>
+        </div>
+
+        <div class="products__grid">
+
+          <!-- 1 — Montre Aura · Tech + Mode -->
+          <article class="card card--tech card--mode">
+            <div class="card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" alt="Montre Aura" class="card__img" />
+              <span class="card__badge">-20%</span>
+            </div>
+            <div class="card__body">
+              <h3 class="card__name">Montre Aura</h3>
+              <div class="card__prices">
+                <p class="card__price">119 200 Ar</p>
+                <p class="card__price--old">149 000 Ar</p>
+              </div>
+              <button class="btn btn--card"
+                onclick="ajouterAuPanier('Montre Aura','119200','https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&q=70')">
+                🛒 Ajouter au panier
+              </button>
+            </div>
+          </article>
+
+          <!-- 2 — Casque Nova Pro · Tech -->
+          <article class="card card--tech">
+            <div class="card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" alt="Casque Nova Pro" class="card__img" />
+            </div>
+            <div class="card__body">
+              <h3 class="card__name">Casque Nova Pro</h3>
+              <div class="card__prices"><p class="card__price">289 000 Ar</p></div>
+              <button class="btn btn--card"
+                onclick="ajouterAuPanier('Casque Nova Pro','289000','https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100&q=70')">
+                🛒 Ajouter au panier
+              </button>
+            </div>
+          </article>
+
+          <!-- 3 — Sneakers Flux · Mode -->
+          <article class="card card--mode">
+            <div class="card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=400&q=80" alt="Sneakers Flux" class="card__img" />
+              <span class="card__badge">Nouveau</span>
+            </div>
+            <div class="card__body">
+              <h3 class="card__name">Sneakers Flux</h3>
+              <div class="card__prices"><p class="card__price">210 000 Ar</p></div>
+              <button class="btn btn--card"
+                onclick="ajouterAuPanier('Sneakers Flux','210000','https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=100&q=70')">
+                🛒 Ajouter au panier
+              </button>
+            </div>
+          </article>
+
+          <!-- 4 — Caméra Lumix S · Tech -->
+          <article class="card card--tech">
+            <div class="card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&q=80" alt="Caméra Lumix S" class="card__img" />
+            </div>
+            <div class="card__body">
+              <h3 class="card__name">Caméra Lumix S</h3>
+              <div class="card__prices"><p class="card__price">620 000 Ar</p></div>
+              <button class="btn btn--card"
+                onclick="ajouterAuPanier('Caméra Lumix S','620000','https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=100&q=70')">
+                🛒 Ajouter au panier
+              </button>
+            </div>
+          </article>
+
+          <!-- 5 — Sac Urban Pack · Mode -->
+          <article class="card card--mode">
+            <div class="card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80" alt="Sac Urban Pack" class="card__img" />
+            </div>
+            <div class="card__body">
+              <h3 class="card__name">Sac Urban Pack</h3>
+              <div class="card__prices"><p class="card__price">185 000 Ar</p></div>
+              <button class="btn btn--card"
+                onclick="ajouterAuPanier('Sac Urban Pack','185000','https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=100&q=70')">
+                🛒 Ajouter au panier
+              </button>
+            </div>
+          </article>
+
+          <!-- 6 — Parfum Élixir · Lifestyle -->
+          <article class="card card--lifestyle">
+            <div class="card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&q=80" alt="Parfum Élixir" class="card__img" />
+            </div>
+            <div class="card__body">
+              <h3 class="card__name">Parfum Élixir N°7</h3>
+              <div class="card__prices"><p class="card__price">98 000 Ar</p></div>
+              <button class="btn btn--card"
+                onclick="ajouterAuPanier('Parfum Élixir N°7','98000','https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=100&q=70')">
+                🛒 Ajouter au panier
+              </button>
+            </div>
+          </article>
+
+          <!-- 7 — Lunettes Solar · Mode + Lifestyle -->
+          <article class="card card--mode card--lifestyle">
+            <div class="card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&q=80" alt="Lunettes Solar" class="card__img" />
+              <span class="card__badge">Nouveau</span>
+            </div>
+            <div class="card__body">
+              <h3 class="card__name">Lunettes Solar X</h3>
+              <div class="card__prices"><p class="card__price">75 000 Ar</p></div>
+              <button class="btn btn--card"
+                onclick="ajouterAuPanier('Lunettes Solar X','75000','https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&q=70')">
+                🛒 Ajouter au panier
+              </button>
+            </div>
+          </article>
+
+          <!-- 8 — Tablette ProTab · Tech -->
+          <article class="card card--tech">
+            <div class="card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&q=80" alt="Tablette ProTab" class="card__img" />
+            </div>
+            <div class="card__body">
+              <h3 class="card__name">Tablette ProTab 11</h3>
+              <div class="card__prices"><p class="card__price">850 000 Ar</p></div>
+              <button class="btn btn--card"
+                onclick="ajouterAuPanier('Tablette ProTab 11','850000','https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=100&q=70')">
+                🛒 Ajouter au panier
+              </button>
+            </div>
+          </article>
+
+          <!-- 9 — Veste Loft · Mode -->
+          <article class="card card--mode">
+            <div class="card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&q=80" alt="Veste Loft" class="card__img" />
+            </div>
+            <div class="card__body">
+              <h3 class="card__name">Veste Loft Premium</h3>
+              <div class="card__prices"><p class="card__price">320 000 Ar</p></div>
+              <button class="btn btn--card"
+                onclick="ajouterAuPanier('Veste Loft Premium','320000','https://images.unsplash.com/photo-1551028719-00167b16eac5?w=100&q=70')">
+                🛒 Ajouter au panier
+              </button>
+            </div>
+          </article>
+
+          <!-- 10 — Bougie Zen · Lifestyle -->
+          <article class="card card--lifestyle">
+            <div class="card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&q=80" alt="Bougie Zen" class="card__img" />
+            </div>
+            <div class="card__body">
+              <h3 class="card__name">Bougie Zen Collection</h3>
+              <div class="card__prices"><p class="card__price">45 000 Ar</p></div>
+              <button class="btn btn--card"
+                onclick="ajouterAuPanier('Bougie Zen Collection','45000','https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=100&q=70')">
+                🛒 Ajouter au panier
+              </button>
+            </div>
+          </article>
+
+          <!-- 11 — Écouteurs Air · Tech -->
+          <article class="card card--tech">
+            <div class="card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=400&q=80" alt="Écouteurs Air" class="card__img" />
+              <span class="card__badge">-15%</span>
+            </div>
+            <div class="card__body">
+              <h3 class="card__name">Écouteurs Air TWS</h3>
+              <div class="card__prices">
+                <p class="card__price">127 500 Ar</p>
+                <p class="card__price--old">150 000 Ar</p>
+              </div>
+              <button class="btn btn--card"
+                onclick="ajouterAuPanier('Écouteurs Air TWS','127500','https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=100&q=70')">
+                🛒 Ajouter au panier
+              </button>
+            </div>
+          </article>
+
+          <!-- 12 — Carnet Craft · Lifestyle -->
+          <article class="card card--lifestyle">
+            <div class="card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=400&q=80" alt="Carnet Craft" class="card__img" />
+            </div>
+            <div class="card__body">
+              <h3 class="card__name">Carnet Craft Cuir</h3>
+              <div class="card__prices"><p class="card__price">38 000 Ar</p></div>
+              <button class="btn btn--card"
+                onclick="ajouterAuPanier('Carnet Craft Cuir','38000','https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=100&q=70')">
+                🛒 Ajouter au panier
+              </button>
+            </div>
+          </article>
+
+        </div><!-- /products__grid -->
+      </div><!-- /filters -->
+    </div>
+  </section>
+
+  <!-- ===== AVANTAGES ===== -->
+  <section class="features" id="avantages">
+    <div class="container">
+      <h2 class="section__title">Pourquoi nous <span>choisir ?</span></h2>
+      <div class="features__grid">
+        <div class="feature">
+          <div class="feature__icon">✦</div>
+          <h3>Qualité garantie</h3>
+          <p>Chaque produit est contrôlé et certifié avant d'être mis en vente. Zéro compromis sur les matériaux.</p>
+        </div>
+        <div class="feature">
+          <div class="feature__icon">⟳</div>
+          <h3>Retour facile</h3>
+          <p>Pas satisfait ? Retournez votre commande sous 30 jours, sans question ni frais supplémentaires.</p>
+        </div>
+        <div class="feature">
+          <div class="feature__icon">◈</div>
+          <h3>Livraison rapide</h3>
+          <p>Expédition sous 24h partout à Madagascar. Suivi en temps réel de votre colis inclus.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PANNEAU PANIER (tiroir latéral) ===== -->
+  <!-- Overlay sombre derrière le tiroir -->
+  <div class="cart-overlay" id="cart-overlay" onclick="fermerPanier()"></div>
+
+  <!-- Tiroir panier -->
+  <aside class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer__header">
+      <h3>🛒 Mon panier (<span id="drawer-count">0</span>)</h3>
+      <button class="cart-close" onclick="fermerPanier()">✕</button>
+    </div>
+
+    <!-- Liste des articles (générée par JS) -->
+    <div class="cart-drawer__items" id="cart-items">
+      <p class="cart-empty">Votre panier est vide.</p>
+    </div>
+
+    <!-- Récapitulatif -->
+    <div class="cart-drawer__footer">
+      <div class="cart-line"><span>Sous-total</span><span id="cart-subtotal">0 Ar</span></div>
+      <div class="cart-line cart-line--total"><span>Total</span><span id="cart-total">0 Ar</span></div>
+
+      <!-- Formulaire de commande : coordonnées + adresse de livraison -->
+      <div class="order-form">
+        <div class="order-form__group">
+          <label for="order-nom">Nom complet</label>
+          <input type="text" id="order-nom" class="input-field" placeholder="Votre nom" />
+        </div>
+        <div class="order-form__group">
+          <label for="order-tel">Téléphone</label>
+          <input type="tel" id="order-tel" class="input-field" placeholder="Ex : 034 12 345 67" />
+        </div>
+        <div class="order-form__group">
+          <label for="order-adresse">Adresse de livraison</label>
+          <textarea id="order-adresse" class="input-field" rows="2" placeholder="Quartier, rue, ville..."></textarea>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn--whatsapp" onclick="commanderWhatsApp()">
+        📱 Commander via WhatsApp
+      </button>
+      <button type="button" class="btn btn--email" onclick="commanderEmail()">
+        ✉️ Commander par Email
+      </button>
+      <button class="cart-clear" onclick="viderPanier()">🗑 Vider le panier</button>
+    </div>
+  </aside>
+
+  <!-- ===== NEWSLETTER ===== -->
+  <section class="newsletter">
+    <div class="container newsletter__inner">
+      <div class="newsletter__text">
+        <h2>Restez dans la <span>tendance</span></h2>
+        <p>Inscrivez-vous et recevez nos offres exclusives en avant-première.</p>
+      </div>
+      <form class="newsletter__form" action="#" method="get">
+        <input type="email" name="email" placeholder="votre@email.com" class="input-field" required />
+        <button type="submit" class="btn btn--primary">S'inscrire</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="contact-section" id="contact">
+    <div class="container">
+      <h2 class="section__title">Nous <span>contacter</span></h2>
+      <p class="section__sub">Une question ? Tsiky vous répond sous 24h.</p>
+      <div class="contact__layout">
+
+        <form class="contact__form" action="#" method="get">
+          <div class="form__row">
+            <div class="form__group">
+              <label for="nom">Nom complet</label>
+              <input type="text" id="nom" name="nom" placeholder="Votre nom" class="input-field" required />
+            </div>
+            <div class="form__group">
+              <label for="email-c">Email</label>
+              <input type="email" id="email-c" name="email" placeholder="votre@email.com" class="input-field" required />
+            </div>
+          </div>
+          <div class="form__group">
+            <label for="sujet">Sujet</label>
+            <input type="text" id="sujet" name="sujet" placeholder="Ex : Question sur une commande" class="input-field" required />
+          </div>
+          <div class="form__group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Décrivez votre demande..." class="input-field" required></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary">Envoyer le message</button>
+        </form>
+
+        <div class="contact__infos">
+          <div class="contact__info-item">
+            <span class="contact__icon">👤</span>
+            <div><h4>Propriétaire</h4><p>Tsiky Fanantenana</p></div>
+          </div>
+          <div class="contact__info-item">
+            <span class="contact__icon">✉️</span>
+            <div><h4>Email</h4><p>tsikynambs@gmail.com</p></div>
+          </div>
+          <div class="contact__info-item">
+            <span class="contact__icon">📞</span>
+            <div>
+              <h4>Téléphone</h4>
+              <p>038 979 11 95<br />037 731 65 62</p>
+            </div>
+          </div>
+          <div class="contact__info-item">
+            <span class="contact__icon">🕐</span>
+            <div><h4>Horaires</h4><p>Lun – Sam : 8h00 – 18h00</p></div>
+          </div>
+
+          <!-- Réseaux sociaux -->
+          <div class="social__links">
+            <a href="https://facebook.com/TsikyFanantenana" target="_blank" class="social__btn social--fb">Facebook</a>
+            <a href="https://instagram.com/TsikyFanantenana" target="_blank" class="social__btn social--ig">Instagram</a>
+            <a href="https://tiktok.com/@TsikyFanantenana" target="_blank" class="social__btn social--tt">TikTok</a>
+            <a href="https://youtube.com/@TsikyFanantenana" target="_blank" class="social__btn social--yt">YouTube</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PIED DE PAGE ===== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__col">
+        <span class="logo">NUV<span>Ō</span></span>
+        <p>Boutique de Tsiky Fanantenana<br />tsikynambs@gmail.com<br />038 979 11 95 · 037 731 65 62</p>
+      </div>
+      <div class="footer__col">
+        <h4>Navigation</h4>
+        <a href="#accueil">Accueil</a>
+        <a href="#produits">Produits</a>
+        <a href="#avantages">À propos</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer__col">
+        <h4>Informations</h4>
+        <a href="#">FAQ</a>
+        <a href="#">Politique de retour</a>
+        <a href="#">Mentions légales</a>
+        <a href="#">Confidentialité</a>
+      </div>
+      <div class="footer__col">
+        <h4>Réseaux sociaux</h4>
+        <a href="https://facebook.com/TsikyFanantenana"  target="_blank">📘 Facebook</a>
+        <a href="https://instagram.com/TsikyFanantenana" target="_blank">📸 Instagram</a>
+        <a href="https://tiktok.com/@TsikyFanantenana"   target="_blank">🎵 TikTok</a>
+        <a href="https://youtube.com/@TsikyFanantenana"  target="_blank">▶️ YouTube</a>
+      </div>
+    </div>
+    <p class="footer__copy">© 2025 NUVŌ — Tsiky Fanantenana. Tous droits réservés.</p>
+  </footer>
+
+  <!-- ===== JAVASCRIPT PANIER ===== -->
+  <script>
+    // Structure du panier : tableau d'objets { nom, prix, img, qty }
+    let panier = [];
+
+    // ── Ajouter un produit ──
+    function ajouterAuPanier(nom, prix, img) {
+      const existant = panier.find(p => p.nom === nom);
+      if (existant) {
+        existant.qty++;                      // incrémenter si déjà présent
+      } else {
+        panier.push({ nom, prix: parseInt(prix), img, qty: 1 });
+      }
+      mettreAJourUI();
+      ouvrirPanier();                        // ouvrir le tiroir automatiquement
+    }
+
+    // ── Retirer un article ──
+    function retirerArticle(nom) {
+      panier = panier.filter(p => p.nom !== nom);
+      mettreAJourUI();
+    }
+
+    // ── Modifier la quantité ──
+    function changerQty(nom, delta) {
+      const item = panier.find(p => p.nom === nom);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) retirerArticle(nom);
+      else mettreAJourUI();
+    }
+
+    // ── Vider le panier ──
+    function viderPanier() {
+      panier = [];
+      mettreAJourUI();
+    }
+
+    // ── Mettre à jour l'affichage ──
+    function mettreAJourUI() {
+      const totalQty   = panier.reduce((s, p) => s + p.qty, 0);
+      const sousTotal  = panier.reduce((s, p) => s + p.prix * p.qty, 0);
+
+      // Compteurs
+      document.getElementById('cart-count').textContent   = totalQty;
+      document.getElementById('drawer-count').textContent = totalQty;
+
+      // Totaux
+      document.getElementById('cart-subtotal').textContent = formaterPrix(sousTotal);
+      document.getElementById('cart-total').textContent    = formaterPrix(sousTotal);
+
+      // Rendu des articles
+      const zone = document.getElementById('cart-items');
+      if (panier.length === 0) {
+        zone.innerHTML = '<p class="cart-empty">Votre panier est vide.</p>';
+        return;
+      }
+      zone.innerHTML = panier.map(p => `
+        <div class="cart-item">
+          <img src="${p.img}" alt="${p.nom}" />
+          <div class="cart-item__info">
+            <p class="cart-item__name">${p.nom}</p>
+            <p class="cart-item__price">${formaterPrix(p.prix * p.qty)}</p>
+            <div class="cart-item__qty">
+              <button onclick="changerQty('${p.nom}', -1)">−</button>
+              <span>${p.qty}</span>
+              <button onclick="changerQty('${p.nom}', +1)">+</button>
+            </div>
+          </div>
+          <button class="cart-item__remove" onclick="retirerArticle('${p.nom}')">✕</button>
+        </div>
+      `).join('');
+    }
+
+    // ── Formater le prix en Ar ──
+    function formaterPrix(n) {
+      return n.toLocaleString('fr-FR') + ' Ar';
+    }
+
+    // ── Coordonnées du vendeur (à adapter si besoin) ──
+    const VENDEUR_WHATSAPP = '261389791195'; // 038 979 11 95 au format international sans le 0
+    const VENDEUR_EMAIL    = 'tsikynambs@gmail.com';
+
+    // ── Vérifie que le panier + le formulaire sont remplis, renvoie les infos ou null ──
+    function validerCommande() {
+      if (panier.length === 0) {
+        alert('Votre panier est vide. Ajoutez au moins un produit avant de commander.');
+        return null;
+      }
+      const nom      = document.getElementById('order-nom').value.trim();
+      const tel      = document.getElementById('order-tel').value.trim();
+      const adresse  = document.getElementById('order-adresse').value.trim();
+
+      if (!nom || !tel || !adresse) {
+        alert('Merci de renseigner votre nom, votre téléphone et votre adresse de livraison avant de valider la commande.');
+        return null;
+      }
+      return { nom, tel, adresse };
+    }
+
+    // ── Construit le texte récapitulatif de la commande ──
+    function construireRecapitulatif(client) {
+      const sousTotal = panier.reduce((s, p) => s + p.prix * p.qty, 0);
+      let texte = `Nouvelle commande — NUVŌ\n\n`;
+      texte += `Client : ${client.nom}\n`;
+      texte += `Téléphone : ${client.tel}\n`;
+      texte += `Adresse de livraison : ${client.adresse}\n\n`;
+      texte += `Produits :\n`;
+      panier.forEach(p => {
+        texte += `- ${p.nom} x${p.qty} = ${formaterPrix(p.prix * p.qty)}\n`;
+      });
+      texte += `\nTotal : ${formaterPrix(sousTotal)}`;
+      return texte;
+    }
+
+    // ── Envoyer la commande via WhatsApp ──
+    function commanderWhatsApp() {
+      const client = validerCommande();
+      if (!client) return;
+      const texte = construireRecapitulatif(client);
+      const url = `https://wa.me/${VENDEUR_WHATSAPP}?text=${encodeURIComponent(texte)}`;
+      window.open(url, '_blank');
+    }
+
+    // ── Envoyer la commande par Email ──
+    function commanderEmail() {
+      const client = validerCommande();
+      if (!client) return;
+      const texte = construireRecapitulatif(client);
+      const sujet = `Nouvelle commande de ${client.nom}`;
+      const url = `mailto:${VENDEUR_EMAIL}?subject=${encodeURIComponent(sujet)}&body=${encodeURIComponent(texte)}`;
+      window.location.href = url;
+    }
+
+    // ── Ouvrir / fermer le tiroir ──
+    // FIX BUG "produit qui devient grand" : quand on bloque le scroll du
+    // body (overflow:hidden), la barre de défilement du navigateur
+    // disparaît et toute la page se recalcule un peu plus large →
+    // effet visuel de "grossissement" des cartes/images.
+    // On compense en ajoutant un padding-right égal à la largeur de la
+    // scrollbar, retiré à la fermeture.
+    function ouvrirPanier() {
+      const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.paddingRight = scrollBarWidth + 'px';
+      document.body.style.overflow = 'hidden';
+      document.getElementById('cart-drawer').classList.add('open');
+      document.getElementById('cart-overlay').classList.add('open');
+    }
+    function fermerPanier() {
+      document.getElementById('cart-drawer').classList.remove('open');
+      document.getElementById('cart-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    }
+    // Fermer avec la touche Échap
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') fermerPanier(); });
+  </script>
+
+</body>
+</html>
