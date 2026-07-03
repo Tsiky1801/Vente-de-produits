@@ -1,0 +1,392 @@
+/* =============================================
+   NUVŌ — Boutique Premium | style.css
+   Palette : fond nuit #0F0F1A, accent violet #7C5CFC
+   Typographie : Syne (titres) + Inter (corps)
+============================================= */
+
+/* --- RESET & BASE --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:        #0F0F1A;   /* fond principal */
+  --bg-card:   #1A1A2E;   /* fond des cartes */
+  --bg-feat:   #13131F;   /* fond section avantages */
+  --accent:    #7C5CFC;   /* violet électrique */
+  --accent-lt: #C5B4FA;   /* violet clair */
+  --text:      #F0EDF8;   /* texte principal */
+  --muted:     #9090B0;   /* texte secondaire */
+  --border:    #2A2A40;   /* bordures subtiles */
+  --radius:    14px;
+  --transition: 0.3s ease;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+img { display: block; width: 100%; }
+
+a { text-decoration: none; color: inherit; }
+
+/* --- CONTAINER --- */
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* =============================================
+   BOUTONS
+============================================= */
+.btn {
+  display: inline-block;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+/* Bouton hero */
+.btn--primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 30px rgba(124, 92, 252, 0.4);
+}
+.btn--primary:hover {
+  background: #9575fd;
+  transform: translateY(-2px);
+  box-shadow: 0 0 45px rgba(124, 92, 252, 0.6);
+}
+
+/* Bouton carte produit */
+.btn--card {
+  background: transparent;
+  color: var(--accent-lt);
+  border: 1px solid var(--accent);
+  padding: 10px 22px;
+  font-size: 0.88rem;
+  border-radius: 50px;
+  width: 100%;
+  transition: background var(--transition), color var(--transition), transform var(--transition);
+}
+.btn--card:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* =============================================
+   EN-TÊTE
+============================================= */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15, 15, 26, 0.85);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+}
+
+/* Logo avec animation underline violet */
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--text);
+  position: relative;
+}
+.logo span { color: var(--accent); }
+.logo::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 0;
+  width: 0; height: 2px;
+  background: var(--accent);
+  transition: width var(--transition);
+}
+.logo:hover::after { width: 100%; }
+
+/* Navigation */
+.nav { display: flex; align-items: center; gap: 32px; }
+
+.nav a {
+  font-size: 0.9rem;
+  color: var(--muted);
+  transition: color var(--transition);
+}
+.nav a:hover { color: var(--text); }
+
+/* Bouton panier dans le nav */
+.nav__cta {
+  background: var(--border);
+  color: var(--accent-lt) !important;
+  padding: 8px 18px;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: background var(--transition) !important;
+}
+.nav__cta:hover { background: var(--accent) !important; color: #fff !important; }
+
+/* =============================================
+   HERO
+============================================= */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 120px 0 140px;
+  text-align: center;
+}
+
+.hero__inner { position: relative; z-index: 1; }
+
+/* Pastille de catégorie */
+.hero__eyebrow {
+  display: inline-block;
+  background: rgba(124, 92, 252, 0.15);
+  color: var(--accent-lt);
+  border: 1px solid rgba(124, 92, 252, 0.3);
+  border-radius: 50px;
+  padding: 6px 18px;
+  font-size: 0.8rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+
+/* Titre split-color : signature du design */
+.hero__title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 24px;
+  color: var(--text);
+}
+.hero__title--accent {
+  color: var(--accent);
+  text-shadow: 0 0 60px rgba(124, 92, 252, 0.5);
+}
+
+.hero__sub {
+  max-width: 500px;
+  margin: 0 auto 40px;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+/* Lueur de fond animée */
+.hero__glow {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(124,92,252,0.18) 0%, transparent 70%);
+  pointer-events: none;
+  animation: pulse 6s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  50%       { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
+}
+
+/* =============================================
+   TITRES DE SECTION
+============================================= */
+.section__title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.section__title span { color: var(--accent); }
+
+.section__sub {
+  text-align: center;
+  color: var(--muted);
+  margin-bottom: 56px;
+}
+
+/* =============================================
+   PRODUITS
+============================================= */
+.products { padding: 100px 0; }
+
+/* Grille responsive : 3 cols → 2 → 1 */
+.products__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+/* Carte produit avec bordure animée au hover */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent);
+  box-shadow: 0 8px 40px rgba(124, 92, 252, 0.2);
+}
+
+/* Image avec zoom léger */
+.card__img-wrap { overflow: hidden; height: 200px; }
+.card__img {
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.card:hover .card__img { transform: scale(1.06); }
+
+.card__body { padding: 20px; }
+
+.card__name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.card__price {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent-lt);
+  margin-bottom: 16px;
+}
+
+/* =============================================
+   AVANTAGES
+============================================= */
+.features {
+  background: var(--bg-feat);
+  padding: 100px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 56px;
+}
+
+.feature {
+  text-align: center;
+  padding: 40px 28px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+.feature:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 30px rgba(124, 92, 252, 0.15);
+  transform: translateY(-4px);
+}
+
+.feature__icon {
+  font-size: 2rem;
+  color: var(--accent);
+  margin-bottom: 18px;
+  display: block;
+}
+.feature h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.15rem;
+  margin-bottom: 12px;
+}
+.feature p { color: var(--muted); font-size: 0.93rem; }
+
+/* =============================================
+   PIED DE PAGE
+============================================= */
+.footer {
+  padding: 72px 0 32px;
+  background: var(--bg);
+}
+
+.footer__inner {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid var(--border);
+}
+
+.footer__col p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.8;
+  margin-top: 16px;
+}
+.footer__col h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+.footer__col a {
+  display: block;
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin-bottom: 10px;
+  transition: color var(--transition);
+}
+.footer__col a:hover { color: var(--accent-lt); }
+
+.footer__copy {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.82rem;
+  padding-top: 32px;
+}
+
+/* =============================================
+   RESPONSIVE — Tablette (≤ 900px)
+============================================= */
+@media (max-width: 900px) {
+  .products__grid    { grid-template-columns: repeat(2, 1fr); }
+  .features__grid    { grid-template-columns: repeat(2, 1fr); }
+  .footer__inner     { grid-template-columns: 1fr 1fr; }
+}
+
+/* =============================================
+   RESPONSIVE — Mobile (≤ 600px)
+============================================= */
+@media (max-width: 600px) {
+  /* Menu : masquer les liens, garder CTA */
+  .nav { gap: 16px; }
+  .nav a:not(.nav__cta) { display: none; }
+
+  .hero { padding: 80px 0 100px; }
+
+  .products__grid { grid-template-columns: 1fr; }
+  .features__grid { grid-template-columns: 1fr; }
+  .footer__inner  { grid-template-columns: 1fr; gap: 32px; }
+}
